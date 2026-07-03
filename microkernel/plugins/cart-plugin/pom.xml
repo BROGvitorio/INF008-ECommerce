@@ -10,7 +10,7 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>myplugin</artifactId>
+    <artifactId>cart-plugin</artifactId>
 
     <dependencies>
         <dependency>
@@ -22,16 +22,13 @@
 
     <build>
         <plugins>
-            <!-- Configure maven-jar-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <!-- Change the output directory -->
                     <outputDirectory>${project.basedir}/../</outputDirectory>
-                    <!-- Change the JAR file name -->
-                    <finalName>MyPlugin</finalName>
+                    <finalName>CartPlugin</finalName>
                 </configuration>
             </plugin>
         </plugins>
