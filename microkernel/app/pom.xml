@@ -23,6 +23,17 @@
             <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.x.x</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.x.x</version>
+        </dependency>
     </dependencies>
 
     <build>
