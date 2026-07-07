@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import br.edu.ifba.inf008.shell.AuthenticationController;
 import br.edu.ifba.inf008.shell.IOController;
+import br.edu.ifba.inf008.shell.PersistenceController;
 import br.edu.ifba.inf008.shell.PluginController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +46,7 @@ class ICoreTest {
         private final IAuthenticationController authenticationController = new AuthenticationController();
         private final IIOController ioController = new IOController();
         private final IPluginController pluginController = new PluginController();
+        private final IPersistenceController persistenceController = new PersistenceController();
 
         static void install(ICore core) {
             instance = core;
@@ -72,6 +74,11 @@ class ICoreTest {
         @Override
         public IPluginController getPluginController() {
             return pluginController;
+        }
+
+        @Override
+        public IPersistenceController getPersistenceController() {
+            return persistenceController;
         }
     }
 }
