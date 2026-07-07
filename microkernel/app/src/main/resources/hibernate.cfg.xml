@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">
+            org.mariadb.jdbc.Driver
+        </property>
+        <property name="hibernate.connection.url">
+            jdbc:mariadb://localhost:3306/ecommerce_inf008
+        </property>
+        <property name="hibernate.connection.username">
+            inf008
+        </property>
+        <property name="hibernate.connection.password">
+            inf008
+        </property>
+        <property name="hibernate.dialect">
+            org.hibernate.dialect.MariaDBDialect
+        </property>
+        <property name="hibernate.show_sql">
+            true
+        </property>
+        <property name="hibernate.format_sql">
+            true
+        </property>
+
+        <mapping class="br.edu.ifba.inf008.model.Customers"/>
+        <mapping class="br.edu.ifba.inf008.model.Products"/>
+        <mapping class="br.edu.ifba.inf008.model.StockMovements"/>
+        <mapping class="br.edu.ifba.inf008.model.Carts"/>
+        <mapping class="br.edu.ifba.inf008.model.CartItems"/>
+        <mapping class="br.edu.ifba.inf008.model.ShippingMethods"/>
+        <mapping class="br.edu.ifba.inf008.model.Discounts"/>
+        <mapping class="br.edu.ifba.inf008.model.Orders"/>
+        <mapping class="br.edu.ifba.inf008.model.OrderItems"/>
+        <mapping class="br.edu.ifba.inf008.model.OrderDiscounts"/>
+        <mapping class="br.edu.ifba.inf008.model.Payments"/>
+    </session-factory>
+</hibernate-configuration>
