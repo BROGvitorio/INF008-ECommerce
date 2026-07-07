@@ -19,15 +19,19 @@ public class Core extends ICore
 
         return true;
     }
+
     public IUIController getUIController() {
         return UIController.getInstance();
     }
+
     public IAuthenticationController getAuthenticationController() {
         return authenticationController;
     }
+
     public IIOController getIOController() {
         return ioController;
     }
+    
     public IPluginController getPluginController() {
         return pluginController;
     }
