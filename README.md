@@ -16,7 +16,7 @@ docker compose up -d
 
 ## Passo 2: Compilar o projeto
 
-Execute o comando abaixo para recompilar o projeto, empacotar os plugins em arquivos JAR e iniciar a aplicação:
+Execute o comando abaixo em ```/IFBA/INF008/microkernel``` para recompilar o projeto, empacotar os plugins em arquivos JAR e iniciar a aplicação:
 
 ```bash
 mvn install exec:java -pl app
