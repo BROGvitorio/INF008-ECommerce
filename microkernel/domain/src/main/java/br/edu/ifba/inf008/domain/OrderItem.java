@@ -1,18 +1,18 @@
-package br.edu.ifba.inf008.model;
+package br.edu.ifba.inf008.domain;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "cart_items")
-public class CartItem {
+@Table(name = "order_items")
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -24,24 +24,29 @@ public class CartItem {
     @Column(name = "unit_price", nullable = false)
     private BigDecimal unitPrice;
 
-    public CartItem() {}
+    @Column(name = "line_total", nullable = false)
+    private BigDecimal lineTotal;
 
-    public CartItem(Cart cart, Product product, Integer quantity, BigDecimal unitPrice) {
-        this.cart = cart;
+    public OrderItem() {}
+
+    public OrderItem(Order order, Product product, Integer quantity, BigDecimal unitPrice, 
+                     BigDecimal lineTotal) {
+        this.order = order;
         this.product = product;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+        this.lineTotal = lineTotal;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Cart getCart() {
-        return cart;
+    public Order getOrder() {
+        return order;
     }
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Product getProduct() {
@@ -63,5 +68,12 @@ public class CartItem {
     }
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getLineTotal() {
+        return lineTotal;
+    }
+    public void setLineTotal(BigDecimal lineTotal) {
+        this.lineTotal = lineTotal;
     }
 }

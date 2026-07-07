@@ -28,16 +28,16 @@
             true
         </property>
 
-        <mapping class="br.edu.ifba.inf008.model.Customers"/>
-        <mapping class="br.edu.ifba.inf008.model.Products"/>
-        <mapping class="br.edu.ifba.inf008.model.StockMovements"/>
-        <mapping class="br.edu.ifba.inf008.model.Carts"/>
-        <mapping class="br.edu.ifba.inf008.model.CartItems"/>
-        <mapping class="br.edu.ifba.inf008.model.ShippingMethods"/>
-        <mapping class="br.edu.ifba.inf008.model.Discounts"/>
-        <mapping class="br.edu.ifba.inf008.model.Orders"/>
-        <mapping class="br.edu.ifba.inf008.model.OrderItems"/>
-        <mapping class="br.edu.ifba.inf008.model.OrderDiscounts"/>
-        <mapping class="br.edu.ifba.inf008.model.Payments"/>
+        <mapping class="br.edu.ifba.inf008.Customer"/>
+        <mapping class="br.edu.ifba.inf008.domain.Product"/>
+        <mapping class="br.edu.ifba.inf008.domain.StockMovement"/>
+        <mapping class="br.edu.ifba.inf008.domain.Cart"/>
+        <mapping class="br.edu.ifba.inf008.domain.CartItem"/>
+        <mapping class="br.edu.ifba.inf008.domain.ShippingMethod"/>
+        <mapping class="br.edu.ifba.inf008.domain.Discount"/>
+        <mapping class="br.edu.ifba.inf008.domain.Order"/>
+        <mapping class="br.edu.ifba.inf008.domain.OrderItem"/>
+        <mapping class="br.edu.ifba.inf008.domain.OrderDiscount"/>
+        <mapping class="br.edu.ifba.inf008.domain.Payment"/>
     </session-factory>
 </hibernate-configuration>
