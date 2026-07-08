@@ -78,12 +78,12 @@ public class UIController extends Application implements IUIController
         return menuItem;
     }
 
-    public boolean createTab(String tabText, Node contents) {
+    public Tab createTab(String tabText, Node contents) {
         Tab tab = new Tab();
         tab.setText(tabText);
         tab.setContent(contents);
         tabPane.getTabs().add(tab);
 
-        return true;
+        return tab;
     }
 }
