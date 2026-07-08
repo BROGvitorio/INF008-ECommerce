@@ -1,6 +1,8 @@
-/home/melbshy/IFBA/INF008/microkernel/app/src/main/java/br/edu/ifba/inf008/App.java
-/home/melbshy/IFBA/INF008/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/AuthenticationController.java
-/home/melbshy/IFBA/INF008/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/Core.java
-/home/melbshy/IFBA/INF008/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/IOController.java
-/home/melbshy/IFBA/INF008/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/PluginController.java
-/home/melbshy/IFBA/INF008/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/UIController.java
+/home/melbshy/IFBA/INF008-ECommerce/microkernel/app/src/main/java/br/edu/ifba/inf008/App.java
+/home/melbshy/IFBA/INF008-ECommerce/microkernel/app/src/main/java/br/edu/ifba/inf008/database/HibernateUtil.java
+/home/melbshy/IFBA/INF008-ECommerce/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/AuthenticationController.java
+/home/melbshy/IFBA/INF008-ECommerce/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/Core.java
+/home/melbshy/IFBA/INF008-ECommerce/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/IOController.java
+/home/melbshy/IFBA/INF008-ECommerce/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/PersistenceController.java
+/home/melbshy/IFBA/INF008-ECommerce/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/PluginController.java
+/home/melbshy/IFBA/INF008-ECommerce/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/UIController.java

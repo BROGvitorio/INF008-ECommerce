@@ -1,8 +1,10 @@
 package br.edu.ifba.inf008.plugins;
 
+
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.interfaces.IPersistenceController;
 
 import javafx.scene.control.MenuItem;
 import javafx.event.EventHandler;
@@ -13,12 +15,23 @@ import javafx.scene.paint.Color;
 public class CartPlugin implements IPlugin {
     public boolean init() {
         IUIController uiController = ICore.getInstance().getUIController();
+        IPersistenceController persistenceController = ICore.getInstance().getPersistenceController();
+
 
         MenuItem menuItem = uiController.createMenuItem("Menu 2", "CART");
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 System.out.println("Cart também tá rodando");
+            }
+        });
+
+        MenuItem menuItemTESTE = uiController.createMenuItem("Menu 2", "TESTE");
+        menuItemTESTE.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // CartC cart = new CartC("TESTE");
+                // persistenceController.save(cart);
             }
         });
 

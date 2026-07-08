@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.model;
+package br.edu.ifba.inf008.domain;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
