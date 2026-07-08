@@ -1,5 +1,7 @@
 package br.edu.ifba.inf008.plugins;
 
+import br.edu.ifba.inf008.domain.Cart;
+import br.edu.ifba.inf008.domain.Customer;
 
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.ICore;
@@ -30,8 +32,12 @@ public class CartPlugin implements IPlugin {
         menuItemTESTE.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                // CartC cart = new CartC("TESTE");
-                // persistenceController.save(cart);
+                Cart cart = new Cart(
+                    persistenceController.findById(Customer.class, new Long((long) 1)),
+                    "TESTE"
+                );
+
+                persistenceController.save(cart);
             }
         });
 

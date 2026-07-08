@@ -1,6 +1,5 @@
 /home/melbshy/IFBA/INF008-ECommerce/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IAuthenticationController.java
 /home/melbshy/IFBA/INF008-ECommerce/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/ICore.java
-/home/melbshy/IFBA/INF008-ECommerce/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IEntityConvertible.java
 /home/melbshy/IFBA/INF008-ECommerce/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IIOController.java
 /home/melbshy/IFBA/INF008-ECommerce/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IPersistenceController.java
 /home/melbshy/IFBA/INF008-ECommerce/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IPlugin.java
