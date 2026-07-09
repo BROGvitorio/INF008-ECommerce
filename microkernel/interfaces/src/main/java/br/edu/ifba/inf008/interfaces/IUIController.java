@@ -8,4 +8,5 @@ public interface IUIController
 {
     public abstract MenuItem createMenuItem(String menuText, String menuItemText);
     public abstract Tab createTab(String tabText, Node contents);
+    public abstract void removeTab(Tab tab);
 }

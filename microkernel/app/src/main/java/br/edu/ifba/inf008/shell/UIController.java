@@ -86,4 +86,8 @@ public class UIController extends Application implements IUIController
 
         return tab;
     }
+
+    public void removeTab(Tab tab) {
+        tabPane.getTabs().remove(tab);
+    }
 }

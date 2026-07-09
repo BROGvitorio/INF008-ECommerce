@@ -47,7 +47,7 @@ public class CartView {
         createMenuItem(menutext, menuItemText).setOnAction(eh);
     }
 
-    public static void createCartTab (Cart cart) {
+    public static void createCartTab (Cart cart, Runnable onCancel) {
         try {
             if (cartTab != null)
                 throw new IllegalStateException("A cart tab already exists.");
@@ -93,6 +93,8 @@ public class CartView {
             );
     
             Button cancelButton = new Button("Cancelar");
+            cancelButton.setOnAction(e -> onCancel.run());
+
             Button checkoutButton = new Button("Checkout");
     
             HBox buttons = new HBox(10, cancelButton, checkoutButton);
@@ -111,5 +113,8 @@ public class CartView {
         }
     }
 
-
+    public static void cancelCartTab () {
+        uiController.removeTab(cartTab);
+        cartTab = null;
+    }
 }

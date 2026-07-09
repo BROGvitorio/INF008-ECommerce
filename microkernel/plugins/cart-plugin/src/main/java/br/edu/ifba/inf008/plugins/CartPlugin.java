@@ -24,7 +24,7 @@ public class CartPlugin implements IPlugin {
                 @Override
                 public void handle(ActionEvent e) {
                     createCart();
-                    CartView.createCartTab(currentCart);
+                    CartView.createCartTab(currentCart, () -> cancelCart());
                 }
             }
         );
@@ -42,8 +42,16 @@ public class CartPlugin implements IPlugin {
                 "OPEN"
             ); 
 
+            persistenceController.save(currentCart);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void cancelCart () {
+        CartView.cancelCartTab();
+        persistenceController.delete(currentCart.getClass(), currentCart.getId());
+        currentCart = null;
     }
 }
