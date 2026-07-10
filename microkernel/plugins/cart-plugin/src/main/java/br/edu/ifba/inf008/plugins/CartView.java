@@ -7,6 +7,7 @@ import br.edu.ifba.inf008.domain.CartItem;
 import br.edu.ifba.inf008.domain.Product;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -26,17 +27,11 @@ import javafx.scene.control.TableView;
 public class CartView {
     private static IUIController uiController = null;
     private static Tab cartTab = null;
+    private static TableView<CartItem> table = new TableView<CartItem>();
     
     static {
         uiController = ICore.getInstance().getUIController();
     }
-
-    private static Product testP = new Product(
-        "testP-00",
-        "testP",
-        "testeeee",
-        new BigDecimal(1.00)
-    );
 
     public static MenuItem createMenuItem (String menutext, String menuItemText) {
         MenuItem menuItem = uiController.createMenuItem(menutext, menuItemText);
@@ -58,7 +53,7 @@ public class CartView {
             Label subtitle = new Label("Seus itens");
             subtitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
     
-            TableView<CartItem> table = new TableView<>();
+            // TableView<CartItem> table = new TableView<>();
             TableColumn<CartItem, String> productColumn = new TableColumn<>("Product Name");
             productColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
@@ -82,15 +77,7 @@ public class CartView {
 
             table.getColumns().addAll(productColumn, quantityColumn, unitPriceColumn);
 
-
-            table.getItems().add(
-                new CartItem(
-                    cart, 
-                    testP,
-                    new Integer(2),
-                    testP.getUnitPrice()
-                )
-            );
+            table.getItems().addAll(cart.getItems());
     
             Button cancelButton = new Button("Cancelar");
             cancelButton.setOnAction(e -> onCancel.run());
@@ -113,8 +100,17 @@ public class CartView {
         }
     }
 
+    public static void updateTable (Cart cart) {
+        if (cart == null)
+                throw new IllegalStateException("You haven't a shipping cart already.");
+
+        table.getItems().clear();
+        table.getItems().addAll(cart.getItems());
+    }
+
     public static void cancelCartTab () {
         uiController.removeTab(cartTab);
+        table = new TableView<CartItem>();
         cartTab = null;
     }
 }
