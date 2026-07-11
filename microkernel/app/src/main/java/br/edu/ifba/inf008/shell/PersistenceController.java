@@ -72,7 +72,7 @@ public class PersistenceController implements IPersistenceController {
     public <T> List<T> findAll(Class<T> clazz) {
         try (Session session = HibernateUtil.getSessionFactory().openSession())
         {
-            String query = "FROM " + clazz.getSimpleName().toLowerCase() + "s";
+            String query = "FROM " + clazz.getSimpleName();
             return session.createQuery(query, clazz).list();
         }
     }

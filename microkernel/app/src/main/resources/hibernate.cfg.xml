@@ -28,7 +28,7 @@
             true
         </property>
 
-        <mapping class="br.edu.ifba.inf008.Customer"/>
+        <mapping class="br.edu.ifba.inf008.domain.Customer"/>
         <mapping class="br.edu.ifba.inf008.domain.Product"/>
         <mapping class="br.edu.ifba.inf008.domain.StockMovement"/>
         <mapping class="br.edu.ifba.inf008.domain.Cart"/>
