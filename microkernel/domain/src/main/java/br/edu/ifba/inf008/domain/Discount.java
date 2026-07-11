@@ -1,31 +1,39 @@
 package br.edu.ifba.inf008.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "discounts")
+@Getter
+@NoArgsConstructor
 public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(nullable = false, unique = true, length = 40)
     private String code;
 
+    @Setter
     @Column(nullable = false, length = 80)
     private String name;
 
+    @Setter
     @Column(name = "discount_type", nullable = false, length = 30)
     private String discountType;
 
+    @Setter
     @Column(nullable = false)
     private BigDecimal value;
 
+    @Setter
     @Column(nullable = false)
     private Boolean active = true;
-
-    public Discount() {}
 
     public Discount(String code, String name, String discountType,
                     BigDecimal value, Boolean active) {
@@ -33,45 +41,6 @@ public class Discount {
         this.name = name;
         this.discountType = discountType;
         this.value = value;
-        this.active = active;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }   
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDiscountType() {
-        return discountType;
-    }
-    public void setDiscountType(String discountType) {
-        this.discountType = discountType;
-    }
-
-    public BigDecimal getValue() {
-        return value;
-    }
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-    public void setActive(Boolean active) {
         this.active = active;
     }
 }

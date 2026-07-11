@@ -1,10 +1,15 @@
 package br.edu.ifba.inf008.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "stock_movements")
+@Getter
+@NoArgsConstructor
 public class StockMovement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,19 +19,20 @@ public class StockMovement {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Setter
     @Column(name = "movement_type", nullable = false, length = 30)
     private String movementType;
 
+    @Setter
     @Column(nullable = false)
     private Integer quantity;
 
+    @Setter
     @Column(nullable = false, length = 120)
     private String reason;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    public StockMovement() {}
 
     public StockMovement(Product product, String movementType, Integer quantity, String reason) {
         this.product = product;
