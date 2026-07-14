@@ -1,10 +1,15 @@
 package br.edu.ifba.inf008.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_discounts")
+@Getter
+@NoArgsConstructor
 public class OrderDiscount {
     @EmbeddedId
     private OrderDiscountId id;
@@ -19,34 +24,14 @@ public class OrderDiscount {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
+    @Setter
     @Column(nullable = false)
     private BigDecimal amount;
-
-    public OrderDiscount() {}
 
     public OrderDiscount(Order order, Discount discount, BigDecimal amount) {
         this.order = order;
         this.discount = discount;
         this.amount = amount;
         this.id = new OrderDiscountId(order.getId(), discount.getId());
-    }
-
-    public OrderDiscountId getId() {
-        return id;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public Discount getDiscount() {
-        return discount;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
     }
 }

@@ -1,47 +1,58 @@
 package br.edu.ifba.inf008.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
+@Getter
+@NoArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "shipping_method_id", nullable = false)
     private ShippingMethod shippingMethod;
 
+    @Setter
     @Column(nullable = false, length = 30)
     private String status;
 
+    @Setter
     @Column(nullable = false)
     private BigDecimal subtotal;
 
+    @Setter
     @Column(name = "discount_total", nullable = false)
     private BigDecimal discountTotal;
 
+    @Setter
     @Column(name = "shipping_total", nullable = false)
     private BigDecimal shippingTotal;
 
+    @Setter
     @Column(name = "grand_total", nullable = false)
     private BigDecimal grandTotal;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    public Order() {}
 
     public Order(Customer customer, Cart cart, ShippingMethod shippingMethod, String status, 
                  BigDecimal subtotal, BigDecimal discountTotal, BigDecimal shippingTotal,
@@ -54,69 +65,5 @@ public class Order {
         this.discountTotal = discountTotal;
         this.shippingTotal = shippingTotal;
         this.grandTotal = grandTotal;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public ShippingMethod getShippingMethod() {
-        return shippingMethod;
-    }
-    public void setShippingMethod(ShippingMethod shippingMethod) {
-        this.shippingMethod = shippingMethod;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public BigDecimal getSubtotal() {
-        return subtotal;
-    }
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
-    }
-
-    public BigDecimal getDiscountTotal() {
-        return discountTotal;
-    }
-    public void setDiscountTotal(BigDecimal discountTotal) {
-        this.discountTotal = discountTotal;
-    }
-
-    public BigDecimal getShippingTotal() {
-        return shippingTotal;
-    }
-    public void setShippingTotal(BigDecimal shippingTotal) {
-        this.shippingTotal = shippingTotal;
-    }
-
-    public BigDecimal getGrandTotal() {
-        return grandTotal;
-    }
-    public void setGrandTotal(BigDecimal grandTotal) {
-        this.grandTotal = grandTotal;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }
