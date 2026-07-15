@@ -12,7 +12,7 @@
         <module>interfaces</module>
         <module>domain</module>
         <module>app</module>
-        <module>plugins/myplugin</module>
+        <module>plugins/checkout-plugin</module>
     </modules>
 
     <properties>

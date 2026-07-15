@@ -29,7 +29,7 @@ public class Cart {
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
     private List<CartItem> items = new ArrayList<CartItem>();
 
     public Cart(Customer customer, String status) {
