@@ -1,9 +1,8 @@
 package br.edu.ifba.inf008.plugins;
 
-import java.util.ArrayList;
 import java.util.Map;
+import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 
 import br.edu.ifba.inf008.domain.Cart;
 import br.edu.ifba.inf008.domain.CartItem;
@@ -34,7 +33,6 @@ public class CartPlugin implements IPlugin {
             testCustomer = new Customer("Cart Test Customer", "cart.test.customer@email.com", "STUDENT");
             persistenceController.save(testCustomer);
         }
-
 
         CartView.createMenuItem(
             "Cart", 
@@ -89,6 +87,7 @@ public class CartPlugin implements IPlugin {
                 () -> checkout(),
                 this::updateCartItemQuantity
             );
+            updateView();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -118,6 +117,11 @@ public class CartPlugin implements IPlugin {
             throw new InsufficientStockException(stock);
     }
 
+    private void updateView () {
+        CartView.updateTable(cart);
+        CartView.updateSummary(() -> getItemsCount(), () -> getSubtotal());
+    }
+
     public void addCartItem (long productId) {
         try {
             if (cart == null)
@@ -127,7 +131,6 @@ public class CartPlugin implements IPlugin {
 
             checkStock(p.getId(), 1);
 
-            
             CartItem ci = new CartItem (cart, p, Integer.valueOf(1), p.getUnitPrice());
             StockMovement sm = new StockMovement(p, "RESERVED", Integer.valueOf(1), "Cart reservation");
 
@@ -138,9 +141,9 @@ public class CartPlugin implements IPlugin {
             cart.addItem(ci);
 
             CartView.showErrorMessage("");
-            CartView.updateTable(cart);
+            updateView();
         } catch (Exception e) {
-            CartView.showErrorMessage(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
@@ -156,7 +159,7 @@ public class CartPlugin implements IPlugin {
                 cart.removeItem(item);
                 cartStockMovements.remove(item);
 
-                CartView.updateTable(cart);
+                updateView();
                 return;
             }
             
@@ -174,8 +177,8 @@ public class CartPlugin implements IPlugin {
             persistenceController.update(sm);
             persistenceController.update(item);
             
-            CartView.updateTable(cart);
             CartView.showErrorMessage("");
+            updateView();
         } catch (InsufficientStockException e) {
             CartView.showErrorMessage(e.getMessage());
         } catch (Exception e) {
@@ -183,8 +186,28 @@ public class CartPlugin implements IPlugin {
         }
     }
 
-    public void getSubtotal () {
+    public BigDecimal getSubtotal () {
+        BigDecimal subtotal = new BigDecimal(0);
 
+        for (CartItem ci : cart.getItems()) {
+            subtotal = subtotal.add(
+                ci
+                .getUnitPrice()
+                .multiply(BigDecimal.valueOf(ci.getQuantity()))
+            );
+        }
+
+        return subtotal;
+    }
+
+    public int getItemsCount () {
+        int sum = 0;
+
+        for (CartItem ci : cart.getItems()) {
+            sum += ci.getQuantity();
+        }
+        
+        return sum;
     }
 
     public void checkout () {
