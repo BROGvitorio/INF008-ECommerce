@@ -28,8 +28,6 @@ public class OrderDiscount {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    public OrderDiscount() {}
-
     public OrderDiscount(Order order, Discount discount, BigDecimal amount) {
         this.order = order;
         this.discount = discount;
