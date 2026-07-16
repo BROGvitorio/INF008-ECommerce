@@ -24,21 +24,21 @@ import java.util.List;
 public class CatalogView
 {
     private FlowPane catalog;
-    private IPersistenceController persistenceController = ICore.getInstance().getPersistenceController();
+    private final CatalogService service;
 
-    private void loadProducts() {
+    public CatalogView(CatalogService service) {
+        this.service = service;
+    }
+
+    private void loadProducts(List<Product> products) {
         catalog.getChildren().clear();
 
-        List<Product> products = persistenceController.findAll(Product.class);
-
         for (Product p : products) {
-
             VBox productBox = new VBox(10);
             productBox.setPadding(new Insets(15));
             productBox.setAlignment(Pos.CENTER);
             productBox.setPrefSize(200, 170);
             productBox.setSpacing(10);
-
             productBox.setStyle(
                 "-fx-border-color: #DADADA;" + "-fx-border-width: 1;" + 
                 "-fx-border-radius: 8;" + "-fx-background-radius: 8;"
@@ -82,26 +82,22 @@ public class CatalogView
 
         Label lblSku = new Label("SKU");
         TextField txtSku = new TextField();
-        txtSku.setPromptText("Ex: SKU-01");
         txtSku.setMaxWidth(Double.MAX_VALUE);
         txtSku.setStyle(fieldStyle);
 
         Label lblName = new Label("Nome");
         TextField txtName = new TextField();
-        txtName.setPromptText("Nome");
         txtName.setMaxWidth(Double.MAX_VALUE);
         txtName.setStyle(fieldStyle);
         
         Label lblDescription = new Label("Descrição");
         TextArea txtDescription = new TextArea();
-        txtDescription.setPromptText("Descrição...");
         txtDescription.setMaxWidth(Double.MAX_VALUE);
         txtDescription.setStyle(fieldStyle);
         txtDescription.setPrefRowCount(6);
         
         Label lblPrice = new Label("Preço");
         TextField txtPrice = new TextField();
-        txtPrice.setPromptText("0.00");
         txtPrice.setMaxWidth(Double.MAX_VALUE);
         txtPrice.setStyle(fieldStyle);
 
@@ -126,10 +122,11 @@ public class CatalogView
             BigDecimal price = new BigDecimal(txtPrice.getText());
 
             Product product = new Product(sku, name, description, price);
-            persistenceController.save(product);
+            service.createProduct(product);
 
-            loadProducts();
-
+            List<Product> products = service.findAllProducts();
+            loadProducts(products);
+            
             txtSku.clear();
             txtName.clear();
             txtDescription.clear();
@@ -168,7 +165,8 @@ public class CatalogView
         catalog.setHgap(15);
         catalog.setVgap(15);
 
-        loadProducts();
+        List<Product> products = service.findAllProducts();
+        loadProducts(products);
 
         VBox root = new VBox(15);
         root.setPadding(new Insets(15));
@@ -200,6 +198,13 @@ public class CatalogView
             "-fx-cursor: hand;"
         );
 
+        search.setOnAction(event -> {
+            String filter = txtFilter.getText();
+
+            List<Product> products = service.findByNameProduct(filter);
+            loadProducts(products);
+        });
+
         HBox filter = new HBox(10, txtFilter, search);
         filter.setAlignment(Pos.CENTER);
 
@@ -210,6 +215,5 @@ public class CatalogView
         IUIController uiController = ICore.getInstance().getUIController();
         uiController.createTab("Catalog", createCatalog());
         uiController.createTab("Form", createForm());
-    }
-    
+    } 
 }

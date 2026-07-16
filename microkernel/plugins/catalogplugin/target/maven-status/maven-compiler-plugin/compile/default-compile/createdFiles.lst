@@ -1,2 +1,3 @@
 br\edu\ifba\inf008\plugins\CatalogPlugin.class
+br\edu\ifba\inf008\plugins\CatalogService.class
 br\edu\ifba\inf008\plugins\CatalogView.class

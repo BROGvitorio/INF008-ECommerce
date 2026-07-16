@@ -5,7 +5,9 @@ import br.edu.ifba.inf008.interfaces.IPlugin;
 public class CatalogPlugin implements IPlugin
 {
     public boolean init() {
-        CatalogView view = new CatalogView();
+        CatalogService service = new CatalogService();
+
+        CatalogView view = new CatalogView(service);
         view.show();
 
         return true;

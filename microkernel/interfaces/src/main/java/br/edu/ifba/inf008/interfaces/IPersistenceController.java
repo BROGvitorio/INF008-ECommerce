@@ -7,4 +7,5 @@ public interface IPersistenceController {
     void delete(Class<?> clazz, Long id);
     <T> T findById(Class<T> clazz, Long id);
     <T> List<T> findAll(Class<T> clazz);
+    <T> List<T> findByName(Class<T> clazz, String name);
 }
