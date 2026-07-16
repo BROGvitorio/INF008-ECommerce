@@ -1,6 +1,8 @@
 package br.edu.ifba.inf008.plugins;
 
 
+import java.math.BigDecimal;
+
 import br.edu.ifba.inf008.domain.Cart;
 import br.edu.ifba.inf008.domain.CartItem;
 import br.edu.ifba.inf008.domain.Customer;
@@ -75,9 +77,37 @@ public class CheckoutPlugin implements IPlugin {
         
         loadMockData();
 
-        CheckoutView.createCheckoutPage(testCart);
+        CheckoutView.createCheckoutPage(
+            testCart, 
+            () -> getItemsCount(),
+            () -> getItemsTotal()
+        );
         
 
         return true;
+    }
+
+    public int getItemsCount () {
+        int sum = 0;
+
+        for (CartItem ci : testCart.getItems()) {
+            sum += ci.getQuantity();
+        }
+        
+        return sum;
+    }
+
+    public BigDecimal getItemsTotal () {
+        BigDecimal subtotal = new BigDecimal(0);
+
+        for (CartItem ci : testCart.getItems()) {
+            subtotal = subtotal.add(
+                ci
+                .getUnitPrice()
+                .multiply(BigDecimal.valueOf(ci.getQuantity()))
+            );
+        }
+
+        return subtotal;
     }
 }

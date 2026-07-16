@@ -1,6 +1,7 @@
 package br.edu.ifba.inf008.plugins;
 
 import java.math.BigDecimal;
+import java.util.function.Supplier;
 
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
@@ -28,11 +29,17 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class CheckoutView {
     private static IUIController uiController = null;
     private static Tab checkoutTab = null;
+
+    private static final IntegerProperty itemsCount = new SimpleIntegerProperty(0);
+    private static final StringProperty itemsTotal = new SimpleStringProperty("$ 0,00");
 
     private static TableView<CartItem> itemsTable = new TableView<CartItem>();
 
@@ -91,7 +98,7 @@ public class CheckoutView {
         nameCol.setReorderable(false);
         
         TableColumn<CartItem, Integer> quantityCol = new TableColumn<>("QUANTITY");
-        quantityCol.setCellValueFactory(cellData -> new SimpleObjectProperty(
+        quantityCol.setCellValueFactory(cellData -> new SimpleObjectProperty<>(
             cellData.getValue().getQuantity())
         );
         quantityCol.setStyle("-fx-alignment: CENTER;");
@@ -130,7 +137,11 @@ public class CheckoutView {
 
     }
 
-    public static void createCheckoutPage(Cart cart) {
+    public static void createCheckoutPage(
+        Cart cart,
+        Supplier<Integer> getItemsCount, 
+        Supplier<BigDecimal> getItemsTotal
+    ) {
 
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
@@ -194,8 +205,11 @@ public class CheckoutView {
 
         VBox totals = new VBox(8);
 
+        // itemsCount.set(getItemsCount.get());
+        itemsTotal.set(String.format("$ %.2f", getItemsTotal.get()));
+
         totals.getChildren().addAll(
-                createTotalRow("Items Total:", "$145.00"),
+                createTotalRow("Items Total:", itemsTotal.getValue()),
                 createTotalRow("Shipping:", "$5.00"),
                 createTotalRow("Discount Applied:", "-$20.00", "#2BA84A"),
                 new Separator(),
@@ -283,7 +297,6 @@ public class CheckoutView {
         right.getChildren().addAll(
                 paymentTitle,
                 paymentSeparator,
-                paymentMethod,
                 paymentCombo,
                 cardHolder,
                 holderField,
@@ -308,66 +321,81 @@ public class CheckoutView {
         checkoutTab = uiController.createTab("Checkout", root);
     }
 
-    // private static Node createCartItem(String name, String qty, String price) {
+    private static BorderPane createTotalRow(String label,
+                                   String value,
+                                   String color,
+                                   boolean bold) {
 
-    //     Label nameLabel = new Label(name);
-    //     nameLabel.setStyle("-fx-font-size:22px; -fx-font-weight:bold;");
+        Label left = new Label(label);
+        Label right = new Label(value);
 
-    //     Label qtyLabel = new Label(qty);
-    //     qtyLabel.setStyle("-fx-font-size:18px; -fx-text-fill:#666666;");
+        String style = bold
+                ? "-fx-font-size:22px; -fx-font-weight:bold;"
+                : "-fx-font-size:20px;";
 
-    //     VBox left = new VBox(4, nameLabel, qtyLabel);
+        left.setStyle(style + "-fx-text-fill:" + color + ";");
+        right.setStyle(style + "-fx-text-fill:" + color + ";");
 
-    //     Label priceLabel = new Label(price);
-    //     priceLabel.setStyle("-fx-font-size:22px;");
+        BorderPane pane = new BorderPane();
+        pane.setLeft(left);
+        pane.setRight(right);
+
+        return pane;
+    }
+
+    private static BorderPane createTotalRow(String label, String value) {
+        return createTotalRow(label, value, "-fx-text-base-color", false);
+    }
+
+    private static BorderPane createTotalRow(String label, String value, boolean bold) {
+        return createTotalRow(label, value, "-fx-text-base-color", bold);
+    }
+
+    private static BorderPane createTotalRow(String label, String value, String color) {
+        return createTotalRow(label, value, color, false);
+    }
+
+
+
+    // private static BorderPane createTotalRow(String label,
+    //                                 String value,
+    //                                 boolean bold) {
+
+    //     Label left = new Label(label);
+    //     Label right = new Label(value);
+
+    //     if (bold) {
+    //         left.setStyle("-fx-font-size:22px;-fx-font-weight:bold;");
+    //         right.setStyle("-fx-font-size:22px;-fx-font-weight:bold;");
+    //     } else {
+    //         left.setStyle("-fx-font-size:20px;");
+    //         right.setStyle("-fx-font-size:20px;");
+    //     }
 
     //     BorderPane pane = new BorderPane();
     //     pane.setLeft(left);
-    //     pane.setRight(priceLabel);
+    //     pane.setRight(right);
 
     //     return pane;
     // }
 
-    private static Node createTotalRow(String label, String value) {
-        return createTotalRow(label, value, false);
-    }
+    // private static BorderPane createTotalRow(String label,
+    //                                 String value,
+    //                                 String color) {
+                                        
+    //     Node pane = createTotalRow(label, value);
+    //     pane.setStyle("-fx-text-fill:" + color + ";");
 
-    private static Node createTotalRow(String label,
-                                    String value,
-                                    boolean bold) {
+    //     // Label left = new Label(label);
+    //     // left.setStyle("-fx-font-size:20px;");
 
-        Label left = new Label(label);
-        Label right = new Label(value);
+    //     // Label right = new Label(value);
+    //     // right.setStyle("-fx-font-size:20px; -fx-text-fill:" + color + ";");
 
-        if (bold) {
-            left.setStyle("-fx-font-size:22px;-fx-font-weight:bold;");
-            right.setStyle("-fx-font-size:22px;-fx-font-weight:bold;");
-        } else {
-            left.setStyle("-fx-font-size:20px;");
-            right.setStyle("-fx-font-size:20px;");
-        }
+    //     // BorderPane pane = new BorderPane();
+    //     // pane.setLeft(left);
+    //     // pane.setRight(right);
 
-        BorderPane pane = new BorderPane();
-        pane.setLeft(left);
-        pane.setRight(right);
-
-        return pane;
-    }
-
-    private static Node createTotalRow(String label,
-                                    String value,
-                                    String color) {
-
-        Label left = new Label(label);
-        left.setStyle("-fx-font-size:20px;");
-
-        Label right = new Label(value);
-        right.setStyle("-fx-font-size:20px; -fx-text-fill:" + color + ";");
-
-        BorderPane pane = new BorderPane();
-        pane.setLeft(left);
-        pane.setRight(right);
-
-        return pane;
-    }
+    //     return pane;
+    // }
 }
