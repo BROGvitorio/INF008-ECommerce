@@ -162,6 +162,8 @@ public class CatalogView
         Label title = new Label("Catálogo de Produtos");
         title.setStyle("-fx-font-size: 24px;" + "-fx-font-weight: bold;");
 
+        HBox filter = createFilter();
+
         catalog = new FlowPane();
         catalog.setHgap(15);
         catalog.setVgap(15);
@@ -171,12 +173,37 @@ public class CatalogView
         VBox root = new VBox(15);
         root.setPadding(new Insets(15));
 
-        root.getChildren().addAll(title, catalog);
+        root.getChildren().addAll(title, filter, catalog);
 
         ScrollPane scroll = new ScrollPane(root);
         scroll.setFitToWidth(true);
 
         return scroll;
+    }
+
+    //Consulta de produtos
+    private HBox createFilter() {
+        String fieldStyle = 
+            "-fx-background-radius: 6;" + "-fx-border-radius: 6;" +
+            "-fx-border-color: #CCCCCC;" + "-fx-font-size: 14px;"
+        ;
+
+        TextField txtFilter = new TextField();
+        txtFilter.setPromptText("Pesquisar...");
+        txtFilter.setMaxWidth(Double.MAX_VALUE);
+        txtFilter.setStyle(fieldStyle);
+
+        Button search = new Button("Buscar");
+        search.setStyle(
+            "-fx-background-color: #1976D2;" + "-fx-text-fill: white;" + 
+            "-fx-font-weight: bold;" + "-fx-padding: 8 22;" + "-fx-background-radius: 6;" +
+            "-fx-cursor: hand;"
+        );
+
+        HBox filter = new HBox(10, txtFilter, search);
+        filter.setAlignment(Pos.CENTER);
+
+        return filter;
     }
 
     public void show() {
