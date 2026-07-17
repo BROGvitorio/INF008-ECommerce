@@ -38,4 +38,10 @@ public class CatalogService
 
         return stock;
     }
+
+    public void checkStock(Product product, int quantity) {
+        if (quantity > getAvailableStock(product)) {
+            throw new InsufficientStockException();
+        }
+    }
 }
