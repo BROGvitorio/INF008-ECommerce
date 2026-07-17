@@ -16,9 +16,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.scene.text.Text;
-import java.math.BigDecimal;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class CatalogView
@@ -37,7 +39,7 @@ public class CatalogView
             VBox productBox = new VBox(10);
             productBox.setPadding(new Insets(15));
             productBox.setAlignment(Pos.CENTER);
-            productBox.setPrefSize(200, 170);
+            productBox.setPrefSize(217, 170);
             productBox.setSpacing(10);
             productBox.setStyle(
                 "-fx-border-color: #DADADA;" + "-fx-border-width: 1;" + 
@@ -53,6 +55,12 @@ public class CatalogView
             Text description = new Text(p.getDescription());
             description.setWrappingWidth(180);
 
+            Label sku = new Label("Código: " + p.getSku());
+            sku.setStyle("-fx-font-size: 11px; -fx-text-fill: #666;");
+
+            Label stock = new Label("Estoque: " + service.getAvailableStock(p));
+            stock.setStyle("-fx-font-size: 11px; -fx-text-fill: #2E7D32;");
+
             Label unitPrice = new Label("R$ " + p.getUnitPrice());
             unitPrice.setStyle("-fx-font-weight: bold;");
 
@@ -62,7 +70,12 @@ public class CatalogView
                 "-fx-background-radius: 6;" + "-fx-cursor: hand;"
             );
 
-            productBox.getChildren().addAll(name, description, unitPrice, addCart);
+            HBox infoBox = new HBox(15);
+            infoBox.setAlignment(Pos.CENTER_LEFT);
+
+            infoBox.getChildren().addAll(sku, stock);
+
+            productBox.getChildren().addAll(name, description, infoBox, unitPrice, addCart);
 
             catalog.getChildren().add(productBox);
         }

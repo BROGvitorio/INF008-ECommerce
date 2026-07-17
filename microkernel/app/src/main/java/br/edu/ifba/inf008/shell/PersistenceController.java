@@ -1,7 +1,6 @@
 package br.edu.ifba.inf008.shell;
 
 import br.edu.ifba.inf008.database.HibernateUtil;
-import br.edu.ifba.inf008.domain.Product;
 import br.edu.ifba.inf008.interfaces.IPersistenceController;
 
 import org.hibernate.Session;
@@ -85,6 +84,14 @@ public class PersistenceController implements IPersistenceController {
             return session.createQuery(query, clazz)
                 .setParameter("name", "%" + name.toLowerCase() + "%")
                 .list();
+        }
+    }
+
+    public <T> List<T> findBy(Class<T> clazz, String attribute, Object object) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String query = "FROM " + clazz.getSimpleName() + " WHERE " + attribute + " = :object";
+
+            return session.createQuery(query, clazz).setParameter("object", object).list();
         }
     }
 

@@ -8,4 +8,5 @@ public interface IPersistenceController {
     <T> T findById(Class<T> clazz, Long id);
     <T> List<T> findAll(Class<T> clazz);
     <T> List<T> findByName(Class<T> clazz, String name);
+    <T> List<T> findBy(Class<T> clazz, String attribute, Object object);
 }
