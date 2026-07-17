@@ -44,5 +44,5 @@ SELECT * FROM nome_da_tabela;
 Execute o comando abaixo em `IFBA/INF008-ECommerce/microkernel` para compilar o projeto, empacotar os plugins em arquivos JAR e iniciar a aplicação:
 
 ```bash
-mvn install exec:java -pl app
+mvn install && mvn exec:java -pl app
 ```
