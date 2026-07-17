@@ -38,7 +38,7 @@ public class CartView {
     private static IUIController uiController = null;
     private static Tab cartTab = null;
     private static TableView<CartItem> table = new TableView<CartItem>();
-    private static final StringProperty errorMessage = new SimpleStringProperty("MUITOS ERROS");
+    private static final StringProperty errorMessage = new SimpleStringProperty("");
     private static final IntegerProperty itemsCount = new SimpleIntegerProperty(0);
     private static final StringProperty subtotal = new SimpleStringProperty("$ 0,00");
 
@@ -55,30 +55,78 @@ public class CartView {
         createMenuItem(menutext, menuItemText).setOnAction(eh);
     }
 
-    private static VBox createLeftSide(BiConsumer<CartItem, Integer> onUpdateCartItemQuantity) {
-        VBox left = new VBox(15);
-        left.setPrefWidth(700);
+    public static void showErrorMessage(String message) {
+        errorMessage.set(message);
+    }
 
-        HBox header = new HBox();
-        header.setAlignment(Pos.CENTER_LEFT);
+    public static void createCartTab (
+            Cart cart,
+            Runnable onCancel,
+            Runnable onCheckout,
+            BiConsumer<CartItem, Integer> onUpdateCartItemQuantity) {
+        try {
 
-        Label title = new Label("Shopping Cart");
-        title.setStyle("-fx-font-size:20; -fx-font-weight:bold;");
+            if (cartTab != null)
+                throw new IllegalStateException("A cart tab already exists.");
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+            
+            BorderPane root = new BorderPane();
+            root.setPadding(new Insets(20));
 
-        Label items = new Label("3 Items");
-        items.setStyle("-fx-font-weight:bold;");
+            VBox left = createLeftSide(onUpdateCartItemQuantity);
+            VBox summary = createSummary(cart, onCancel, onCheckout);
 
-        header.getChildren().addAll(title, spacer, items);
+            BorderPane.setMargin(summary, new Insets(0, 0, 0, 10));
 
+            root.setCenter(left);
+            root.setRight(summary);
+
+            itemsCount.set(cart.getItems().size());
+            table.getItems().setAll(cart.getItems());
+            cartTab = uiController.createTab("Shopping Cart", root);
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    public static void updateTable(Cart cart) {
+        if (cart == null)
+            throw new IllegalStateException("You haven't a shipping cart already.");
+
+        table.getItems().setAll(cart.getItems());
+        table.refresh();
+    }
+
+    public static void updateSummary (Supplier<Integer> getItemsCount, Supplier<BigDecimal> getSubtotal) {
+        int ic = getItemsCount.get();
+        BigDecimal st = getSubtotal.get();
+        
+        itemsCount.set(ic);
+        subtotal.set(
+            String.format("$ %.2f", st)
+        );
+    }
+
+    public static void cancelCartTab() {
+        uiController.removeTab(cartTab);
+        table = new TableView<CartItem>();
+        cartTab = null;
+    }
+
+    private static void setTable (
+        BiConsumer<CartItem, Integer> onUpdateCartItemQuantity
+    ) {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        table.setPrefHeight(400);
+        table.setMaxHeight(Double.MAX_VALUE);
+        table.setPrefHeight(900);
+        VBox.setVgrow(table, Priority.ALWAYS);
 
         TableColumn<CartItem, String> nameCol = new TableColumn<>("NAME");
         nameCol.setCellValueFactory(cellData -> new SimpleStringProperty(
                 cellData.getValue().getProduct().getName()));
+        nameCol.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<CartItem, Integer> quantityCol = new TableColumn<>("QUANTITY");
         quantityCol.setCellFactory(col -> new TableCell<>() {
@@ -117,41 +165,59 @@ public class CartView {
                 }
             }
         });
+        quantityCol.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<CartItem, String> priceCol = new TableColumn<>("PRICE");
-
         priceCol.setCellValueFactory(cell -> new SimpleStringProperty(
                 String.format("$%.2f",
                         cell.getValue().getUnitPrice())));
+        priceCol.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<CartItem, String> totalCol = new TableColumn<>("TOTAL");
-
         totalCol.setCellValueFactory(cell -> new SimpleStringProperty(
                 String.format("$%.2f",
                         cell
                                 .getValue()
                                 .getUnitPrice()
                                 .multiply(BigDecimal.valueOf(cell.getValue().getQuantity())))));
+        totalCol.setStyle("-fx-alignment: CENTER;");
 
-        table.getColumns().addAll(
-                nameCol,
-                quantityCol,
-                priceCol,
-                totalCol);
+        table.setStyle("-fx-font-size: 16px;");
 
-        Text continueShopping = new Text("<- Continue Shopping");
+        table.getColumns().addAll(nameCol, quantityCol, priceCol, totalCol);
+    }
 
+    private static VBox createLeftSide (
+        BiConsumer<CartItem, Integer> onUpdateCartItemQuantity
+    ) {
+        VBox left = new VBox(15);
+        left.setPrefWidth(600);
+
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+
+        Label title = new Label("Shopping Cart");
+        title.setStyle("-fx-font-size:20; -fx-font-weight:bold;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        header.getChildren().addAll(title, spacer);
+
+        setTable(onUpdateCartItemQuantity);
+
+        VBox.setVgrow(table, Priority.ALWAYS);
+        
         left.getChildren().addAll(
                 header,
-                table,
-                continueShopping);
+                table);
         return left;
     }
 
     private static VBox createSummary(Cart cart, Runnable onCancel, Runnable onCheckout) {
         VBox summary = new VBox(15);
         summary.setPadding(new Insets(15));
-        summary.setPrefWidth(280);
+        summary.setPrefWidth(400);
 
         summary.setStyle("-fx-background-color:#f7f7f7;" + "-fx-border-color:#dddddd;");
 
@@ -204,7 +270,7 @@ public class CartView {
 
         Separator s3 = new Separator();
         VBox errorBox = new VBox(20);
-        VBox.setVgrow(errorBox, Priority.SOMETIMES);
+        VBox.setVgrow(errorBox, Priority.ALWAYS);
         errorBox.setAlignment(Pos.CENTER);
         errorBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         errorBox.setFillWidth(true);
@@ -225,68 +291,5 @@ public class CartView {
                 errorBox);
 
         return summary;
-    }
-
-    public static void showErrorMessage(String message) {
-        errorMessage.set(message);
-    }
-
-    public static void createCartTab(
-            Cart cart,
-            Runnable onCancel,
-            Runnable onCheckout,
-            BiConsumer<CartItem, Integer> onUpdateCartItemQuantity) {
-        try {
-
-            if (cartTab != null)
-                throw new IllegalStateException("A cart tab already exists.");
-
-            BorderPane root = new BorderPane();
-            root.setPadding(new Insets(20));
-
-            VBox left = createLeftSide(onUpdateCartItemQuantity);
-            VBox summary = createSummary(cart, onCancel, onCheckout);
-
-            BorderPane.setMargin(summary, new Insets(0, 0, 0, 10));
-
-            root.setCenter(left);
-            root.setRight(summary);
-
-            itemsCount.set(cart.getItems().size());
-            table.getItems().setAll(cart.getItems());
-            cartTab = uiController.createTab("Shopping Cart", root);
-
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-
-    }
-
-    public static void updateTable(Cart cart) {
-        if (cart == null)
-            throw new IllegalStateException("You haven't a shipping cart already.");
-
-        table.getItems().setAll(cart.getItems());
-        table.refresh();
-    }
-
-    public static void updateSummary (Supplier<Integer> getItemsCount, Supplier<BigDecimal> getSubtotal) {
-        int ic = getItemsCount.get();
-        BigDecimal st = getSubtotal.get();
-        
-        itemsCount.set(ic);
-        subtotal.set(
-            String.format("$ %.2f", st)
-        );
-    }
-
-    public static void cancelCartTab() {
-        uiController.removeTab(cartTab);
-        table = new TableView<CartItem>();
-        cartTab = null;
-    }
-
-    public static void showSubTotal(BigDecimal subTotal) {
-
     }
 }

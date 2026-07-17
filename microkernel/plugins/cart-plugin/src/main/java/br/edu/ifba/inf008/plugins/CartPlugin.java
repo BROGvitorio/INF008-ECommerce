@@ -3,6 +3,7 @@ package br.edu.ifba.inf008.plugins;
 import java.util.Map;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 
 import br.edu.ifba.inf008.domain.Cart;
 import br.edu.ifba.inf008.domain.CartItem;
@@ -84,7 +85,7 @@ public class CartPlugin implements IPlugin {
             CartView.createCartTab(
                 cart,
                 () -> cancelCart(),
-                () -> checkout(),
+                () -> toCheckout(),
                 this::updateCartItemQuantity
             );
             updateView();
@@ -96,36 +97,29 @@ public class CartPlugin implements IPlugin {
 
     public void cancelCart () {
         CartView.cancelCartTab();
+
+        if (!cartStockMovements.isEmpty()) {
+            cartStockMovements.forEach((cartItem, stockMovement) -> {
+                persistenceController.delete(StockMovement.class, stockMovement.getId());
+                persistenceController.delete(CartItem.class, cartItem.getId());
+            });
+        }
+        
         persistenceController.delete(cart.getClass(), cart.getId());
         cart = null;
-    }
-
-    private void checkStock (long productId, int change) {
-        int stock = 0;
-        Product p = persistenceController.findById(Product.class, Long.valueOf(productId));
-
-        if (p == null) {
-            throw new NotFoundException("No product could be found with that ID.");
-        }
-
-        for (StockMovement sm : persistenceController.findAll(StockMovement.class)) {
-            if (sm.getProduct().getId().equals(p.getId()))
-                stock += "INBOUND".equals(sm.getMovementType()) ? sm.getQuantity() : sm.getQuantity() * -1;
-        }
-
-        if (stock < change)
-            throw new InsufficientStockException(stock);
-    }
-
-    private void updateView () {
-        CartView.updateTable(cart);
-        CartView.updateSummary(() -> getItemsCount(), () -> getSubtotal());
     }
 
     public void addCartItem (long productId) {
         try {
             if (cart == null)
                 throw new NotFoundException("You haven't a shipping cart already.");
+
+            for (CartItem ci : cart.getItems()) {
+                if (ci.getProduct().getId().equals(productId)) {
+                    updateCartItemQuantity(ci, 1);
+                    return;
+                }
+            }
 
             Product p = persistenceController.findById(Product.class, Long.valueOf(productId));
 
@@ -144,6 +138,12 @@ public class CartPlugin implements IPlugin {
             updateView();
         } catch (Exception e) {
             System.err.println(e.getMessage());
+        }
+    }
+
+    public void addCartItems(List<Long> productIDs) {
+        for (Long productId : productIDs) {
+            addCartItem(productId);
         }
     }
 
@@ -210,7 +210,29 @@ public class CartPlugin implements IPlugin {
         return sum;
     }
 
-    public void checkout () {
+    public void toCheckout () {
 
+    }
+
+    private void checkStock (long productId, int change) {
+        int stock = 0;
+        Product p = persistenceController.findById(Product.class, Long.valueOf(productId));
+
+        if (p == null) {
+            throw new NotFoundException("No product could be found with that ID.");
+        }
+
+        for (StockMovement sm : persistenceController.findAll(StockMovement.class)) {
+            if (sm.getProduct().getId().equals(p.getId()))
+                stock += "INBOUND".equals(sm.getMovementType()) ? sm.getQuantity() : sm.getQuantity() * -1;
+        }
+
+        if (stock < change)
+            throw new InsufficientStockException(stock);
+    }
+
+    private void updateView () {
+        CartView.updateTable(cart);
+        CartView.updateSummary(() -> getItemsCount(), () -> getSubtotal());
     }
 }
