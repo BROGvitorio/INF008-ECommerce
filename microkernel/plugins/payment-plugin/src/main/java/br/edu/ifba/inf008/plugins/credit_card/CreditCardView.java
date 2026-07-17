@@ -126,7 +126,7 @@ public class CreditCardView {
         return creditCardInputs;
     }
 
-    private static void clearFields() {
+    public static void clearFields() {
         holderField.clear();
         cardField.clear();
         expiryField.clear();

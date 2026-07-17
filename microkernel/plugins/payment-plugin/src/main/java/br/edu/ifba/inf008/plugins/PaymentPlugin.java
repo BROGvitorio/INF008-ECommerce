@@ -14,19 +14,20 @@ import br.edu.ifba.inf008.interfaces.IPersistenceController;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.credit_card.CreditCardPayment;
 import br.edu.ifba.inf008.plugins.credit_card.CreditCardView;
+import br.edu.ifba.inf008.plugins.exceptions.InvalidPaymentException;
+import br.edu.ifba.inf008.plugins.pix.PixPayment;
 import javafx.scene.layout.VBox;
 
 public class PaymentPlugin implements IPlugin {
-    private static List<IPayable> paymentMethods = new ArrayList<>();    
+    private static List<IPayable> paymentMethods = new ArrayList<>();
+    
+    static {
+        paymentMethods.add(new CreditCardPayment());
+        paymentMethods.add(new PixPayment());
+
+    }
 
     public boolean init() {
-        paymentMethods.add(new CreditCardPayment());
-
-        // paymentMethods.addAll(
-        //     // new BoletoPayment(),
-        //     new CreditCardPayment()
-        //     // new PixPayment()
-        // );
 
         IUIController uiController = ICore.getInstance().getUIController();
 
@@ -38,7 +39,7 @@ public class PaymentPlugin implements IPlugin {
         try {
             PaymentView.getSelectedMethod(paymentMethods).processPayment();
             PaymentView.showErrorMessage("");
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidPaymentException ex) {
             PaymentView.showErrorMessage(ex.getMessage());
         } catch (Exception ex) {
             System.err.println(ex.getMessage());

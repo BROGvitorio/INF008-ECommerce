@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import br.edu.ifba.inf008.plugins.IPayable;
+import br.edu.ifba.inf008.plugins.exceptions.InvalidPaymentException;
 import javafx.scene.layout.VBox;
 
 public class CreditCardPayment implements IPayable {
@@ -26,7 +27,7 @@ public class CreditCardPayment implements IPayable {
 
         for (String field : fields) {
             if (field == null || field.isBlank())
-                throw new IllegalArgumentException("All fields must be filled in");
+                throw new InvalidPaymentException("All fields must be filled in");
         }
 
         String expiry = fields.getLast();
@@ -35,7 +36,10 @@ public class CreditCardPayment implements IPayable {
         YearMonth date = YearMonth.parse(expiry, formatter);
 
         if (date.isBefore(YearMonth.now()))
-            throw new IllegalArgumentException("Invalid expiry date.");
+            throw new InvalidPaymentException("Invalid expiry date.");
+
+        CreditCardView.clearFields();
     }
+
 
 }

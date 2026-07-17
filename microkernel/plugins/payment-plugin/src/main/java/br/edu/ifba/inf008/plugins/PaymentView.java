@@ -9,10 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -20,33 +17,49 @@ import javafx.scene.text.Text;
 
 public class PaymentView {
     private static ComboBox<String> paymentCombo = new ComboBox<>();
+    private static VBox paymentMethodInputs;
     private static final StringProperty errorMessage = new SimpleStringProperty("");
-    
-    public static VBox setUI (
-        List<IPayable> paymentMethods,
-        Runnable onCheckout
+
+    public static VBox setUI(
+            List<IPayable> paymentMethods,
+            Runnable onCheckout
     ) {
         VBox right = new VBox(18);
         right.setPadding(new Insets(20));
         right.setPrefWidth(420);
 
         right.setStyle(
-            "-fx-background-color:white;" +
-            "-fx-background-radius:8;" +
-            "-fx-border-color:#DDDDDD;" +
-            "-fx-border-radius:8;"
-        );
+                "-fx-background-color:white;" +
+                        "-fx-background-radius:8;" +
+                        "-fx-border-color:#DDDDDD;" +
+                        "-fx-border-radius:8;");
 
         Label paymentTitle = new Label("Payment");
         paymentTitle.setStyle("-fx-font-size:28px; -fx-font-weight:bold;");
 
         Separator s1 = new Separator();
 
+        paymentCombo.getItems().clear();
         for (IPayable pm : paymentMethods) {
             paymentCombo.getItems().add(pm.getName());
         }
         paymentCombo.getSelectionModel().selectFirst();
-        VBox paymentMethodInputs = getSelectedMethod(paymentMethods).getUI();
+        paymentMethodInputs = getSelectedMethod(paymentMethods).getUI();
+        paymentCombo
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldString, newString) -> {
+                    if (newString != null) {
+                        PaymentView.showErrorMessage("");
+                        IPayable selectedMethod = PaymentView.getSelectedMethod(paymentMethods);
+
+                        int index = right.getChildren().indexOf(paymentMethodInputs);
+                        paymentMethodInputs = selectedMethod.getUI();
+                        if (index != -1)
+                            right.getChildren().set(index, paymentMethodInputs);
+
+                    }
+                });
 
         Separator s2 = new Separator();
 
@@ -56,11 +69,10 @@ public class PaymentView {
         checkout.setOnAction(e -> onCheckout.run());
 
         checkout.setStyle(
-            "-fx-background-color:#2E64B6;" +
-            "-fx-text-fill:white;" +
-            "-fx-font-size:24px;" + 
-            "-fx-font-weight:bold;"        
-        );
+                "-fx-background-color:#2E64B6;" +
+                        "-fx-text-fill:white;" +
+                        "-fx-font-size:24px;" +
+                        "-fx-font-weight:bold;");
 
         Separator s3 = new Separator();
 
@@ -83,13 +95,12 @@ public class PaymentView {
                 s2,
                 checkout,
                 s3,
-                errorBox
-        );
+                errorBox);
 
         return right;
     }
 
-    public static IPayable getSelectedMethod (List<IPayable> paymentMethods) {
+    public static IPayable getSelectedMethod(List<IPayable> paymentMethods) {
         for (IPayable p : paymentMethods) {
             if (paymentCombo.getValue().equalsIgnoreCase(p.getName()))
                 return p;
