@@ -6,14 +6,22 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class PaymentView {
     private static ComboBox<String> paymentCombo = new ComboBox<>();
@@ -22,8 +30,7 @@ public class PaymentView {
 
     public static VBox setUI(
             List<IPayable> paymentMethods,
-            Runnable onCheckout
-    ) {
+            Runnable onCheckout) {
         VBox right = new VBox(18);
         right.setPadding(new Insets(20));
         right.setPrefWidth(420);
@@ -111,5 +118,26 @@ public class PaymentView {
 
     public static void showErrorMessage(String message) {
         errorMessage.set(message);
+    }
+
+    public static void showOrderConfirmedPopup() {
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setTitle("Order Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText("Your order has been confirmed!");
+
+        alert.getButtonTypes().setAll(ButtonType.OK);
+
+        ImageView imageView = new ImageView(
+            new Image(PaymentView.class.getResourceAsStream("/confirmed-order-icon.png"))
+        );
+        imageView.setFitWidth(70);
+        imageView.setFitHeight(70); 
+        imageView.setPreserveRatio(true);
+        alert.getDialogPane().setGraphic(imageView);
+
+        alert.showAndWait();
     }
 }

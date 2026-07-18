@@ -15,6 +15,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class PixView {
+    private static String pixCode = null;
 
     public static VBox setUI() {
 
@@ -56,7 +57,7 @@ public class PixView {
         copyBox.setManaged(false);
 
         generateButton.setOnAction(event -> {
-            String pixCode = UUID.randomUUID().toString();
+            pixCode = UUID.randomUUID().toString();
 
             Image qrImage = new Image(PixView.class.getResourceAsStream("/qrcode.png"));
 
@@ -97,5 +98,9 @@ public class PixView {
         );
 
         return root;
+    }
+
+    public static String getPixCode() {
+        return pixCode;
     }
 }

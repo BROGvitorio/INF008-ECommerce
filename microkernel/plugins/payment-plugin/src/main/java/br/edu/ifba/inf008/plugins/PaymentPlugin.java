@@ -5,6 +5,7 @@ import br.edu.ifba.inf008.interfaces.IPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.ifba.inf008.domain.Cart;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.plugins.boleto.BoletoPayment;
@@ -34,6 +35,7 @@ public class PaymentPlugin implements IPlugin {
         try {
             PaymentView.getSelectedMethod(paymentMethods).processPayment();
             PaymentView.showErrorMessage("");
+            PaymentView.showOrderConfirmedPopup();            
         } catch (InvalidPaymentException ex) {
             PaymentView.showErrorMessage(ex.getMessage());
         } catch (Exception ex) {

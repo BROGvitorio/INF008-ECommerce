@@ -17,7 +17,11 @@ public class PixPayment implements IPayable {
 
     @Override
     public void processPayment () {
-        if (Math.random() < 0.10)
+        if (!checkPixCode())
             throw new InvalidPaymentException();
+    }
+
+    public boolean checkPixCode() {
+        return PixView.getPixCode() != null;
     }
 }
