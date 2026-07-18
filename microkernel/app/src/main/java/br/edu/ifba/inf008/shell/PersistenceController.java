@@ -77,4 +77,22 @@ public class PersistenceController implements IPersistenceController {
         }
     }
 
+    public <T> List<T> findByName(Class<T> clazz, String name) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String query = "FROM " + clazz.getSimpleName() + " WHERE lower(name) LIKE :name";
+
+            return session.createQuery(query, clazz)
+                .setParameter("name", "%" + name.toLowerCase() + "%")
+                .list();
+        }
+    }
+
+    public <T> List<T> findBy(Class<T> clazz, String attribute, Object object) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String query = "FROM " + clazz.getSimpleName() + " WHERE " + attribute + " = :object";
+
+            return session.createQuery(query, clazz).setParameter("object", object).list();
+        }
+    }
+
 }

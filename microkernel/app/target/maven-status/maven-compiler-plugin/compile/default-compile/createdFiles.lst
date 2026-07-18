@@ -1,0 +1,9 @@
+br\edu\ifba\inf008\shell\Core.class
+br\edu\ifba\inf008\shell\AuthenticationController.class
+br\edu\ifba\inf008\shell\IOController.class
+br\edu\ifba\inf008\shell\PluginController.class
+br\edu\ifba\inf008\shell\PluginController$1.class
+br\edu\ifba\inf008\database\HibernateUtil.class
+br\edu\ifba\inf008\shell\UIController.class
+br\edu\ifba\inf008\App.class
+br\edu\ifba\inf008\shell\PersistenceController.class
