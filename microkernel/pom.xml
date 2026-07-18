@@ -14,6 +14,7 @@
         <module>app</module>
         <module>plugins/catalogplugin</module>
         <module>plugins/checkout-plugin</module>
+        <module>plugins/payment-plugin</module>
     </modules>
 
     <properties>
