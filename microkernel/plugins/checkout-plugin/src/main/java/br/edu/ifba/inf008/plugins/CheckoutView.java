@@ -39,7 +39,9 @@ public class CheckoutView {
     private static Tab checkoutTab = null;
 
     private static final IntegerProperty itemsCount = new SimpleIntegerProperty(0);
-    private static final StringProperty itemsTotal = new SimpleStringProperty("$ 0,00");
+    private static final StringProperty itemsTotal = new SimpleStringProperty("$ 0.00");
+
+    private static final StringProperty errorMessage = new SimpleStringProperty("");
 
     private static TableView<CartItem> itemsTable = new TableView<CartItem>();
 
@@ -48,7 +50,6 @@ public class CheckoutView {
     }
 
     private static VBox createShippingBox () {
-        
         TextField addressField = new TextField();
         addressField.setPromptText("Enter your full address");
         addressField.setMaxWidth(Double.MAX_VALUE); 
@@ -89,7 +90,6 @@ public class CheckoutView {
     }
 
     private static void createItemsTable (Cart cart) {
-
         TableColumn<CartItem, String> nameCol = new TableColumn<>("NAME");
         nameCol.setCellValueFactory(cellData -> new SimpleStringProperty(
                 cellData.getValue().getProduct().getName())
@@ -116,7 +116,6 @@ public class CheckoutView {
         priceCol.setStyle("-fx-alignment: CENTER-RIGHT;");
         priceCol.setResizable(false);
         priceCol.setReorderable(false);
-
         
         nameCol.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.7));
         quantityCol.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.1));
@@ -146,10 +145,6 @@ public class CheckoutView {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
 
-        //--------------------------------------------------
-        // LEFT PANEL
-        //--------------------------------------------------
-
         VBox left = new VBox(18);
         left.setPadding(new Insets(20));
         left.setPrefWidth(650);
@@ -170,42 +165,26 @@ public class CheckoutView {
         Separator s2 = new Separator();
         VBox shipping = createShippingBox();
 
-        //--------------------------------------------------
-        // Discount
-        //--------------------------------------------------
-
         Label discountLabel = new Label("Apply Discount:");
         discountLabel.setStyle("-fx-font-size:22px; -fx-font-weight:bold;");
-
         ToggleGroup discountGroup = new ToggleGroup();
-
         RadioButton promo = new RadioButton("Promo Code");
         promo.setToggleGroup(discountGroup);
         promo.setSelected(true);
-
         RadioButton student = new RadioButton("Student Discount");
         student.setToggleGroup(discountGroup);
-
         HBox radioBox = new HBox(20, promo, student);
-
         TextField promoField = new TextField();
         promoField.setPromptText("Enter Promo Code");
         HBox.setHgrow(promoField, Priority.ALWAYS);
-
         Button applyButton = new Button("Apply");
         applyButton.setPrefWidth(130);
-
         HBox promoBox = new HBox(10, promoField, applyButton);
-
-        //--------------------------------------------------
-        // Totals
-        //--------------------------------------------------
 
         Separator s3 = new Separator();
 
         VBox totals = new VBox(8);
 
-        // itemsCount.set(getItemsCount.get());
         itemsTotal.set(String.format("$ %.2f", getItemsTotal.get()));
 
         totals.getChildren().addAll(
@@ -228,10 +207,6 @@ public class CheckoutView {
                 s3,
                 totals
         );
-
-        //--------------------------------------------------
-        // RIGHT PANEL
-        //--------------------------------------------------
 
         VBox right = new VBox(18);
         right.setPadding(new Insets(20));
@@ -307,10 +282,6 @@ public class CheckoutView {
                 placeOrder
         );
 
-        //--------------------------------------------------
-        // Main Layout
-        //--------------------------------------------------
-
         HBox content = new HBox(20, left, right);
 
         HBox.setHgrow(left, Priority.ALWAYS);
@@ -321,10 +292,12 @@ public class CheckoutView {
         checkoutTab = uiController.createTab("Checkout", root);
     }
 
-    private static BorderPane createTotalRow(String label,
-                                   String value,
-                                   String color,
-                                   boolean bold) {
+    private static BorderPane createTotalRow (
+        String label,
+        String value,
+        String color,
+        boolean bold
+    ) {
 
         Label left = new Label(label);
         Label right = new Label(value);
@@ -354,48 +327,4 @@ public class CheckoutView {
     private static BorderPane createTotalRow(String label, String value, String color) {
         return createTotalRow(label, value, color, false);
     }
-
-
-
-    // private static BorderPane createTotalRow(String label,
-    //                                 String value,
-    //                                 boolean bold) {
-
-    //     Label left = new Label(label);
-    //     Label right = new Label(value);
-
-    //     if (bold) {
-    //         left.setStyle("-fx-font-size:22px;-fx-font-weight:bold;");
-    //         right.setStyle("-fx-font-size:22px;-fx-font-weight:bold;");
-    //     } else {
-    //         left.setStyle("-fx-font-size:20px;");
-    //         right.setStyle("-fx-font-size:20px;");
-    //     }
-
-    //     BorderPane pane = new BorderPane();
-    //     pane.setLeft(left);
-    //     pane.setRight(right);
-
-    //     return pane;
-    // }
-
-    // private static BorderPane createTotalRow(String label,
-    //                                 String value,
-    //                                 String color) {
-                                        
-    //     Node pane = createTotalRow(label, value);
-    //     pane.setStyle("-fx-text-fill:" + color + ";");
-
-    //     // Label left = new Label(label);
-    //     // left.setStyle("-fx-font-size:20px;");
-
-    //     // Label right = new Label(value);
-    //     // right.setStyle("-fx-font-size:20px; -fx-text-fill:" + color + ";");
-
-    //     // BorderPane pane = new BorderPane();
-    //     // pane.setLeft(left);
-    //     // pane.setRight(right);
-
-    //     return pane;
-    // }
 }
