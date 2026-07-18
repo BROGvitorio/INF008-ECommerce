@@ -198,13 +198,8 @@ public class MockClass {
     public static void createCheckoutPage() {
         loadMockData();
 
-        
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
-
-        //--------------------------------------------------
-        // LEFT PANEL
-        //--------------------------------------------------
 
         VBox left = new VBox(18);
         left.setPadding(new Insets(20));
@@ -225,10 +220,6 @@ public class MockClass {
 
         Separator s2 = new Separator();
         VBox shipping = createShippingBox();
-
-        //--------------------------------------------------
-        // Discount
-        //--------------------------------------------------
 
         Label discountLabel = new Label("Apply Discount:");
         discountLabel.setStyle("-fx-font-size:22px; -fx-font-weight:bold;");
@@ -252,10 +243,6 @@ public class MockClass {
         applyButton.setPrefWidth(130);
 
         HBox promoBox = new HBox(10, promoField, applyButton);
-
-        //--------------------------------------------------
-        // Totals
-        //--------------------------------------------------
 
         Separator s3 = new Separator();
 
@@ -282,17 +269,7 @@ public class MockClass {
                 totals
         );
 
-        //--------------------------------------------------
-        // RIGHT PANEL
-        //--------------------------------------------------
-
         VBox right = PaymentPlugin.getUI();
-
-        // VBox right = PaymentView.getUI();
-
-        //--------------------------------------------------
-        // Main Layout
-        //--------------------------------------------------
 
         HBox content = new HBox(20, left, right);
 

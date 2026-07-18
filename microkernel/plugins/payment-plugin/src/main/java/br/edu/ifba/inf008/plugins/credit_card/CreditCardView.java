@@ -18,7 +18,7 @@ public class CreditCardView {
     private static PasswordField cvvField = new PasswordField();
 
     public static VBox setUI() {
-        VBox creditCardInputs = new VBox();
+        VBox creditCardInputs = new VBox(10);
 
         Label cardHolder = new Label("Cardholder Name");
         TextFormatter<String> holderFormatter = new TextFormatter<>(change -> {
@@ -106,8 +106,8 @@ public class CreditCardView {
 
         cvvField.setTextFormatter(cvvFormatter);
 
-        VBox expiryBox = new VBox(5, expiry, expiryField);
-        VBox cvvBox = new VBox(5, cvv, cvvField);
+        VBox expiryBox = new VBox(10, expiry, expiryField);
+        VBox cvvBox = new VBox(10, cvv, cvvField);
 
         HBox dateRow = new HBox(15, expiryBox, cvvBox);
         HBox.setHgrow(expiryBox, Priority.ALWAYS);

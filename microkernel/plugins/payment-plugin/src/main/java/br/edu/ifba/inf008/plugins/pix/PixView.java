@@ -39,7 +39,7 @@ public class PixView {
 
         Button copyButton = new Button("Copy");
         copyButton.setPrefWidth(70);
-        copyButton.setStyle("-fx-background-insets: 0 0 0 0, 0, 1, 2;");
+        copyButton.setAlignment(Pos.CENTER);
 
         HBox copyBox = new HBox(5, pixCodeField, copyButton);
         copyBox.setAlignment(Pos.CENTER_LEFT);
@@ -56,9 +56,9 @@ public class PixView {
         copyBox.setManaged(false);
 
         generateButton.setOnAction(event -> {
-            String pixCode = UUID.randomUUID().toString();;
+            String pixCode = UUID.randomUUID().toString();
 
-            Image qrImage = new Image(PixView.class.getResourceAsStream("qrcode.png"));
+            Image qrImage = new Image(PixView.class.getResourceAsStream("/qrcode.png"));
 
             qrCodeView.setImage(qrImage);
 
@@ -72,6 +72,9 @@ public class PixView {
 
             copyBox.setManaged(true);
             copyBox.setVisible(true);
+
+            generateButton.setManaged(false);
+            generateButton.setVisible(false);
         });
 
         copyButton.setOnAction(event -> {
