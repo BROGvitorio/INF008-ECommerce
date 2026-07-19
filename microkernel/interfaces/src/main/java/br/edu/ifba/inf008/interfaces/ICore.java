@@ -11,6 +11,7 @@ public abstract class ICore
     public abstract IIOController getIOController();
     public abstract IPluginController getPluginController();
     public abstract IPersistenceController getPersistenceController();
+    public abstract IPluginRegistry getPluginRegistry();
 
     protected static ICore instance = null;
 }

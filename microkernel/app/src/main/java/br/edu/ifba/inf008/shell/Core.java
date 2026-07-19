@@ -40,8 +40,13 @@ public class Core extends ICore {
         return persistenceController;
     }
 
+    public IPluginRegistry getPluginRegistry() {
+        return pluginRegistry;
+    }
+
     private IPersistenceController persistenceController = new PersistenceController();
     private IAuthenticationController authenticationController = new AuthenticationController();
     private IIOController ioController = new IOController();
     private IPluginController pluginController = new PluginController();
+    private IPluginRegistry pluginRegistry = new PluginRegistry();
 }

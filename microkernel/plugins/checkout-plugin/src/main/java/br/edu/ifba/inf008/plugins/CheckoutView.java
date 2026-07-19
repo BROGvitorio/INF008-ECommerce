@@ -2,9 +2,11 @@ package br.edu.ifba.inf008.plugins;
 
 import java.math.BigDecimal;
 import java.util.function.Supplier;
+import  java.util.function.Function;
 
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.interfaces.ICheckoutComponent;
 
 import br.edu.ifba.inf008.domain.Cart;
 import br.edu.ifba.inf008.domain.CartItem;
@@ -139,7 +141,8 @@ public class CheckoutView {
     public static void createCheckoutPage(
         Cart cart,
         Supplier<Integer> getItemsCount, 
-        Supplier<BigDecimal> getItemsTotal
+        Supplier<BigDecimal> getItemsTotal,
+        Function<String, VBox> getComponentUI
     ) {
 
         BorderPane root = new BorderPane();
@@ -208,84 +211,85 @@ public class CheckoutView {
                 totals
         );
 
-        VBox right = new VBox(18);
-        right.setPadding(new Insets(20));
-        right.setPrefWidth(420);
+        VBox paymentBox = getComponentUI.apply("payment");
+        // VBox paymentBox = new VBox(18);
+        // paymentBox.setPadding(new Insets(20));
+        // paymentBox.setPrefWidth(420);
 
-        right.setStyle(
-            "-fx-background-color:white;" +
-            "-fx-background-radius:8;" +
-            "-fx-border-color:#DDDDDD;" +
-            "-fx-border-radius:8;"
-        );
+        // paymentBox.setStyle(
+        //     "-fx-background-color:white;" +
+        //     "-fx-background-radius:8;" +
+        //     "-fx-border-color:#DDDDDD;" +
+        //     "-fx-border-radius:8;"
+        // );
 
-        Label paymentTitle = new Label("Payment");
-        paymentTitle.setStyle("-fx-font-size:28px; -fx-font-weight:bold;");
+        // Label paymentTitle = new Label("Payment");
+        // paymentTitle.setStyle("-fx-font-size:28px; -fx-font-weight:bold;");
 
-        Separator paymentSeparator = new Separator();
+        // Separator paymentSeparator = new Separator();
 
-        ComboBox<String> paymentCombo = new ComboBox<>();
-        paymentCombo.getItems().addAll(
-                "Credit Card",
-                "Debit Card",
-                "PIX",
-                "Cash"
-        );
-        paymentCombo.getSelectionModel().selectFirst();
+        // ComboBox<String> paymentCombo = new ComboBox<>();
+        // paymentCombo.getItems().addAll(
+        //         "Credit Card",
+        //         "Debit Card",
+        //         "PIX",
+        //         "Cash"
+        // );
+        // paymentCombo.getSelectionModel().selectFirst();
 
-        Label cardHolder = new Label("Cardholder Name");
-        TextField holderField = new TextField();
+        // Label cardHolder = new Label("Cardholder Name");
+        // TextField holderField = new TextField();
 
-        Label cardNumber = new Label("Card Number");
-        TextField cardField = new TextField();
-        cardField.setPromptText("XXXX-XXXX-XXXX-XXXX");
+        // Label cardNumber = new Label("Card Number");
+        // TextField cardField = new TextField();
+        // cardField.setPromptText("XXXX-XXXX-XXXX-XXXX");
 
-        Label expiry = new Label("Expiry Date (MM/YY)");
-        TextField expiryField = new TextField();
+        // Label expiry = new Label("Expiry Date (MM/YY)");
+        // TextField expiryField = new TextField();
 
-        Label cvv = new Label("CVV");
-        PasswordField cvvField = new PasswordField();
+        // Label cvv = new Label("CVV");
+        // PasswordField cvvField = new PasswordField();
 
-        VBox expiryBox = new VBox(5, expiry, expiryField);
-        VBox cvvBox = new VBox(5, cvv, cvvField);
+        // VBox expiryBox = new VBox(5, expiry, expiryField);
+        // VBox cvvBox = new VBox(5, cvv, cvvField);
 
-        HBox dateRow = new HBox(15, expiryBox, cvvBox);
-        HBox.setHgrow(expiryBox, Priority.ALWAYS);
-        HBox.setHgrow(cvvBox, Priority.ALWAYS);
+        // HBox dateRow = new HBox(15, expiryBox, cvvBox);
+        // HBox.setHgrow(expiryBox, Priority.ALWAYS);
+        // HBox.setHgrow(cvvBox, Priority.ALWAYS);
 
-        expiryField.setMaxWidth(Double.MAX_VALUE);
-        cvvField.setMaxWidth(Double.MAX_VALUE);
+        // expiryField.setMaxWidth(Double.MAX_VALUE);
+        // cvvField.setMaxWidth(Double.MAX_VALUE);
 
-        Separator paymentSeparator2 = new Separator();
+        // Separator paymentSeparator2 = new Separator();
 
-        Button placeOrder = new Button("Checkout");
-        placeOrder.setMaxWidth(Double.MAX_VALUE);
-        placeOrder.setPrefHeight(50);
+        // Button placeOrder = new Button("Checkout");
+        // placeOrder.setMaxWidth(Double.MAX_VALUE);
+        // placeOrder.setPrefHeight(50);
 
-        placeOrder.setStyle(
-            "-fx-background-color:#2E64B6;" +
-            "-fx-text-fill:white;" +
-            "-fx-font-size:24px;" + 
-            "-fx-font-weight:bold;"        
-        );
+        // placeOrder.setStyle(
+        //     "-fx-background-color:#2E64B6;" +
+        //     "-fx-text-fill:white;" +
+        //     "-fx-font-size:24px;" + 
+        //     "-fx-font-weight:bold;"        
+        // );
 
-        right.getChildren().addAll(
-                paymentTitle,
-                paymentSeparator,
-                paymentCombo,
-                cardHolder,
-                holderField,
-                cardNumber,
-                cardField,
-                dateRow,
-                paymentSeparator2,
-                placeOrder
-        );
+        // paymentBox.getChildren().addAll(
+        //         paymentTitle,
+        //         paymentSeparator,
+        //         paymentCombo,
+        //         cardHolder,
+        //         holderField,
+        //         cardNumber,
+        //         cardField,
+        //         dateRow,
+        //         paymentSeparator2,
+        //         placeOrder
+        // );
 
-        HBox content = new HBox(20, left, right);
+        HBox content = new HBox(20, left, paymentBox);
 
         HBox.setHgrow(left, Priority.ALWAYS);
-        HBox.setHgrow(right, Priority.NEVER);
+        HBox.setHgrow(paymentBox, Priority.NEVER);
 
         root.setCenter(content);
 
