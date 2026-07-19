@@ -13,6 +13,7 @@ import br.edu.ifba.inf008.domain.StockMovement;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IPersistenceController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
+import br.edu.ifba.inf008.plugins.CatalogService;
 import br.edu.ifba.inf008.plugins.Exceptions.InsufficientStockException;
 import br.edu.ifba.inf008.plugins.Exceptions.NotFoundException;
 import javafx.event.ActionEvent;
@@ -26,6 +27,8 @@ public class CartPlugin implements IPlugin {
 
     private Customer testCustomer;
 
+    private CatalogService catalogService = new CatalogService();
+    
     public boolean init() {
         persistenceController = ICore.getInstance().getPersistenceController();
 
@@ -123,7 +126,7 @@ public class CartPlugin implements IPlugin {
 
             Product p = persistenceController.findById(Product.class, Long.valueOf(productId));
 
-            checkStock(p.getId(), 1);
+            checkStock(p, 1);
 
             CartItem ci = new CartItem (cart, p, Integer.valueOf(1), p.getUnitPrice());
             StockMovement sm = new StockMovement(p, "RESERVED", Integer.valueOf(1), "Cart reservation");
@@ -165,7 +168,7 @@ public class CartPlugin implements IPlugin {
             
             if (change > 0)
                 checkStock (
-                    item.getProduct().getId(), 
+                    item.getProduct(),
                     change
                 );
             
@@ -214,21 +217,8 @@ public class CartPlugin implements IPlugin {
 
     }
 
-    private void checkStock (long productId, int change) {
-        int stock = 0;
-        Product p = persistenceController.findById(Product.class, Long.valueOf(productId));
-
-        if (p == null) {
-            throw new NotFoundException("No product could be found with that ID.");
-        }
-
-        for (StockMovement sm : persistenceController.findAll(StockMovement.class)) {
-            if (sm.getProduct().getId().equals(p.getId()))
-                stock += "INBOUND".equals(sm.getMovementType()) ? sm.getQuantity() : sm.getQuantity() * -1;
-        }
-
-        if (stock < change)
-            throw new InsufficientStockException(stock);
+    private void checkStock (Product product, int change) {
+        catalogService.checkStock(change);
     }
 
     private void updateView () {

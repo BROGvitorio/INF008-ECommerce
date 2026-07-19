@@ -12,6 +12,8 @@
         <module>interfaces</module>
         <module>domain</module>
         <module>app</module>
+        <module>plugins/cart-plugin</module>
+        <module>plugins/catalogplugin</module>
     </modules>
 
     <properties>
