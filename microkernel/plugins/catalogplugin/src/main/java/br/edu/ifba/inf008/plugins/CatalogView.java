@@ -55,16 +55,16 @@ public class CatalogView
             Text description = new Text(p.getDescription());
             description.setWrappingWidth(180);
 
-            Label sku = new Label("Código: " + p.getSku());
+            Label sku = new Label("Code: " + p.getSku());
             sku.setStyle("-fx-font-size: 11px; -fx-text-fill: #666;");
 
-            Label stock = new Label("Estoque: " + service.getAvailableStock(p));
+            Label stock = new Label("Stock: " + service.getAvailableStock(p));
             stock.setStyle("-fx-font-size: 11px; -fx-text-fill: #2E7D32;");
 
-            Label unitPrice = new Label("R$ " + p.getUnitPrice());
+            Label unitPrice = new Label("$ " + p.getUnitPrice());
             unitPrice.setStyle("-fx-font-weight: bold;");
 
-            Button addCart = new Button("Adicionar ao Carrinho");
+            Button addCart = new Button("Add to Cart");
             addCart.setStyle(
                 "-fx-background-color: #1976D2;" + "-fx-text-fill: white;" +
                 "-fx-background-radius: 6;" + "-fx-cursor: hand;"
@@ -83,7 +83,7 @@ public class CatalogView
 
     //Cadastro de produtos
     private StackPane createForm() {
-        Label title = new Label("Cadastro de Produto");
+        Label title = new Label("Product Registration");
         title.setStyle("-fx-font-size: 24px;" + "-fx-font-weight: bold;");
 
         VBox form = new VBox(15);
@@ -93,23 +93,23 @@ public class CatalogView
             "-fx-border-color: #CCCCCC;" + "-fx-font-size: 14px;"
         ;
 
-        Label lblSku = new Label("SKU");
+        Label lblSku = new Label("Code");
         TextField txtSku = new TextField();
         txtSku.setMaxWidth(Double.MAX_VALUE);
         txtSku.setStyle(fieldStyle);
 
-        Label lblName = new Label("Nome");
+        Label lblName = new Label("Name");
         TextField txtName = new TextField();
         txtName.setMaxWidth(Double.MAX_VALUE);
         txtName.setStyle(fieldStyle);
         
-        Label lblDescription = new Label("Descrição");
+        Label lblDescription = new Label("Description");
         TextArea txtDescription = new TextArea();
         txtDescription.setMaxWidth(Double.MAX_VALUE);
         txtDescription.setStyle(fieldStyle);
         txtDescription.setPrefRowCount(6);
         
-        Label lblPrice = new Label("Preço");
+        Label lblPrice = new Label("Price");
         TextField txtPrice = new TextField();
         txtPrice.setMaxWidth(Double.MAX_VALUE);
         txtPrice.setStyle(fieldStyle);
@@ -121,7 +121,7 @@ public class CatalogView
 
         form.getChildren().addAll(skuField, nameField, descriptionField, PriceField);
 
-        Button save = new Button("Salvar");
+        Button save = new Button("Save");
         save.setStyle(
             "-fx-background-color: #1976D2;" + "-fx-text-fill: white;" + 
             "-fx-font-weight: bold;" + "-fx-padding: 8 22;" + "-fx-background-radius: 6;" +
@@ -169,7 +169,7 @@ public class CatalogView
 
     //Listagem de produtos
     private ScrollPane createCatalog() {
-        Label title = new Label("Catálogo de Produtos");
+        Label title = new Label("Product Catalog");
         title.setStyle("-fx-font-size: 24px;" + "-fx-font-weight: bold;");
 
         HBox filter = createFilter();
@@ -200,11 +200,11 @@ public class CatalogView
         ;
 
         TextField txtFilter = new TextField();
-        txtFilter.setPromptText("Pesquisar...");
+        txtFilter.setPromptText("Research...");
         txtFilter.setMaxWidth(Double.MAX_VALUE);
         txtFilter.setStyle(fieldStyle);
 
-        Button search = new Button("Buscar");
+        Button search = new Button("Search");
         search.setStyle(
             "-fx-background-color: #1976D2;" + "-fx-text-fill: white;" + 
             "-fx-font-weight: bold;" + "-fx-padding: 8 22;" + "-fx-background-radius: 6;" +
