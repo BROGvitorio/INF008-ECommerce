@@ -1,10 +1,9 @@
 package br.edu.ifba.inf008.plugins;
 
-import br.edu.ifba.inf008.interfaces.ICore;
-import br.edu.ifba.inf008.interfaces.IUIController;
-import br.edu.ifba.inf008.interfaces.IPersistenceController;
 import br.edu.ifba.inf008.domain.Product;
-
+import br.edu.ifba.inf008.interfaces.core.ICore;
+import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
+import br.edu.ifba.inf008.interfaces.core.IUIController;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;

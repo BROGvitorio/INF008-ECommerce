@@ -1,7 +1,7 @@
 package br.edu.ifba.inf008.shell;
 
-import br.edu.ifba.inf008.interfaces.IUIController;
-import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.core.ICore;
+import br.edu.ifba.inf008.interfaces.core.IUIController;
 import br.edu.ifba.inf008.shell.PluginController;
 
 import javafx.application.Application;

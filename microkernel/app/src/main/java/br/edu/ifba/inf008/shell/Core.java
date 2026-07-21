@@ -1,8 +1,13 @@
 package br.edu.ifba.inf008.shell;
 
-import br.edu.ifba.inf008.interfaces.*;
-import javafx.application.Application;
-import javafx.application.Platform;
+import br.edu.ifba.inf008.interfaces.core.*;
+import br.edu.ifba.inf008.interfaces.core.IAuthenticationController;
+import br.edu.ifba.inf008.interfaces.core.ICore;
+import br.edu.ifba.inf008.interfaces.core.IIOController;
+import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
+import br.edu.ifba.inf008.interfaces.core.IPluginController;
+import br.edu.ifba.inf008.interfaces.core.IPluginRegistry;
+import br.edu.ifba.inf008.interfaces.core.IUIController;
 
 public class Core extends ICore {
     private Core() {
@@ -40,8 +45,13 @@ public class Core extends ICore {
         return persistenceController;
     }
 
+    public IPluginRegistry getPluginRegistry() {
+        return pluginRegistry;
+    }
+
     private IPersistenceController persistenceController = new PersistenceController();
     private IAuthenticationController authenticationController = new AuthenticationController();
     private IIOController ioController = new IOController();
     private IPluginController pluginController = new PluginController();
+    private IPluginRegistry pluginRegistry = new PluginRegistry();
 }

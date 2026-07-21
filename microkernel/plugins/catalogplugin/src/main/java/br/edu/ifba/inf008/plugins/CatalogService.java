@@ -1,13 +1,14 @@
 package br.edu.ifba.inf008.plugins;
 
-import br.edu.ifba.inf008.interfaces.ICore;
-import br.edu.ifba.inf008.interfaces.IPersistenceController;
 import br.edu.ifba.inf008.domain.Product;
 import br.edu.ifba.inf008.domain.StockMovement;
+import br.edu.ifba.inf008.interfaces.core.ICore;
+import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
+import br.edu.ifba.inf008.interfaces.plugins.ICatalogService;
 
 import java.util.List;
 
-public class CatalogService
+public class CatalogService implements ICatalogService
 {
     private IPersistenceController persistenceController = ICore.getInstance().getPersistenceController();
 
