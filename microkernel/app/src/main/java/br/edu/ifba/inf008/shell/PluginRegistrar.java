@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.edu.ifba.inf008.interfaces.core.IPluginRegistry;
+import br.edu.ifba.inf008.interfaces.core.IPluginRegistrar;
 
-public class PluginRegistry implements IPluginRegistry {
+public class PluginRegistrar implements IPluginRegistrar {
     private Map<Class<?>, List<Object>> plugins = new HashMap<>();
 
     public <T> void register(Class<T> type, T plugin) {
@@ -33,5 +33,9 @@ public class PluginRegistry implements IPluginRegistry {
 
     public <T> List<Object> getPlugins(Class<T> type) {
         return plugins.get(type);
+    }
+
+    public <T> Object getPlugin(Class<T> type) {
+        return plugins.get(type).getFirst();
     }
 }
