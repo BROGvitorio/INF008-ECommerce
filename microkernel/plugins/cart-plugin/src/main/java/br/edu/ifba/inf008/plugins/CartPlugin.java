@@ -87,6 +87,7 @@ public class CartPlugin implements IPlugin, ICartService {
         
         persistenceController.delete(cart.getClass(), cart.getId());
         cart = null;
+        cartStockMovements.clear();
     }
 
     public void addCartItem (long productId) {
