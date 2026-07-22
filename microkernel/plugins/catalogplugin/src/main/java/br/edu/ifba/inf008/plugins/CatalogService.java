@@ -1,13 +1,17 @@
 package br.edu.ifba.inf008.plugins;
 
-import br.edu.ifba.inf008.interfaces.ICore;
-import br.edu.ifba.inf008.interfaces.IPersistenceController;
 import br.edu.ifba.inf008.domain.Product;
 import br.edu.ifba.inf008.domain.StockMovement;
 
+import br.edu.ifba.inf008.interfaces.core.ICore;
+import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
+import br.edu.ifba.inf008.interfaces.exceptions.InsufficientStockException;
+import br.edu.ifba.inf008.interfaces.exceptions.NotFoundException;
+import br.edu.ifba.inf008.interfaces.plugins.ICatalogService;
+
 import java.util.List;
 
-public class CatalogService
+public class CatalogService implements ICatalogService
 {
     private IPersistenceController persistenceController = ICore.getInstance().getPersistenceController();
 
@@ -40,8 +44,15 @@ public class CatalogService
     }
 
     public void checkStock(Product product, int quantity) {
-        if (quantity > getAvailableStock(product)) {
-            throw new InsufficientStockException();
+        int stock = getAvailableStock(product);
+        Product p = persistenceController.findById(Product.class, product.getId());
+
+        if (p == null) {
+            throw new NotFoundException("No product could be found with that ID.");
+        }
+
+        if (quantity > stock) {
+            throw new InsufficientStockException(stock);
         }
     }
 }

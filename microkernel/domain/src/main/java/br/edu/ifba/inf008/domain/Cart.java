@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.ArrayList;
 
 @Entity
@@ -29,7 +33,7 @@ public class Cart {
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<CartItem>();
 
     public Cart(Customer customer, String status) {
@@ -41,11 +45,11 @@ public class Cart {
         return items;
     }
 
-    public void addItem (CartItem item) {
+    public void addItem(CartItem item) {
         items.add(item);
     }
 
-    public void removeItem (CartItem item) {
-        items.add(item);
+    public void removeItem(CartItem item) {
+        items.remove(item);
     }
 }

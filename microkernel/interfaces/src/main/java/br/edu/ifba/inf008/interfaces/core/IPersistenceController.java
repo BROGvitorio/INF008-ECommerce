@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.interfaces;
+package br.edu.ifba.inf008.interfaces.core;
 import java.util.List;
 
 public interface IPersistenceController {

@@ -1,7 +1,7 @@
 package br.edu.ifba.inf008.shell;
 
 import br.edu.ifba.inf008.database.HibernateUtil;
-import br.edu.ifba.inf008.interfaces.IPersistenceController;
+import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
 
 import org.hibernate.Session;
 
