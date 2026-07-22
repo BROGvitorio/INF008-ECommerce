@@ -13,8 +13,7 @@ import br.edu.ifba.inf008.domain.StockMovement;
 
 import br.edu.ifba.inf008.interfaces.core.ICore;
 import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
-import br.edu.ifba.inf008.interfaces.core.IPluginRegistrar;
-
+import br.edu.ifba.inf008.interfaces.core.IPluginRegistry;
 import br.edu.ifba.inf008.interfaces.plugins.IPlugin;
 import br.edu.ifba.inf008.interfaces.plugins.ICartService;
 import br.edu.ifba.inf008.interfaces.plugins.ICatalogService;
@@ -27,7 +26,7 @@ import javafx.event.EventHandler;
 
 public class CartPlugin implements IPlugin, ICartService {
     private IPersistenceController persistenceController;
-    private IPluginRegistrar pluginRegistrar;
+    private IPluginRegistry pluginRegistry;
 
     private Cart cart = null;
     private Map<CartItem, StockMovement> cartStockMovements = new HashMap<CartItem, StockMovement>();
@@ -35,10 +34,10 @@ public class CartPlugin implements IPlugin, ICartService {
     private Customer testCustomer;
     
     public boolean init() {
-        pluginRegistrar =  ICore.getInstance().getPluginRegistrar();
+        pluginRegistry =  ICore.getInstance().getPluginRegistry();
 
-        pluginRegistrar.register(IPlugin.class, this);
-        pluginRegistrar.register(ICartService.class, this);
+        pluginRegistry.register(IPlugin.class, this);
+        pluginRegistry.register(ICartService.class, this);
         return true ;
     } 
 
@@ -50,39 +49,6 @@ public class CartPlugin implements IPlugin, ICartService {
             testCustomer = new Customer("Cart Test Customer", "cart.test.customer@email.com", "STUDENT");
             persistenceController.save(testCustomer);
         }
-
-        CartView.createMenuItem(
-            "Cart", 
-            "Create",
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    createCart();
-                }
-            }
-        );
-
-        CartView.createMenuItem(
-            "Cart", 
-            "AddItem1",
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    addCartItem((long) 1);
-                }
-            }
-        );
-
-        CartView.createMenuItem(
-            "Cart", 
-            "AddItem2",
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    addCartItem((long) 2);
-                }
-            }
-        );
     }
  
     public void createCart () {
@@ -110,7 +76,7 @@ public class CartPlugin implements IPlugin, ICartService {
     }
 
     public void cancelCart () {
-        CartView.cancelCartTab();
+        CartView.closeCartTab();
 
         if (!cartStockMovements.isEmpty()) {
             cartStockMovements.forEach((cartItem, stockMovement) -> {
@@ -125,8 +91,8 @@ public class CartPlugin implements IPlugin, ICartService {
 
     public void addCartItem (long productId) {
         try {
-            if (cart == null)
-                throw new NotFoundException("You haven't a shipping cart already.");
+            if (!hasCart())
+                createCart();
 
             for (CartItem ci : cart.getItems()) {
                 if (ci.getProduct().getId().equals(productId)) {
@@ -140,7 +106,7 @@ public class CartPlugin implements IPlugin, ICartService {
             checkStock(p, 1);
 
             CartItem ci = new CartItem (cart, p, Integer.valueOf(1), p.getUnitPrice());
-            StockMovement sm = new StockMovement(p, "RESERVED", Integer.valueOf(1), "Cart reservation");
+            StockMovement sm = new StockMovement(p, "OUTBOUND", Integer.valueOf(1), "Cart reservation");
 
             persistenceController.save(sm);
             persistenceController.save(ci);
@@ -225,16 +191,26 @@ public class CartPlugin implements IPlugin, ICartService {
     }
 
     public void toCheckout () {
+        CartView.closeCartTab();
+        cart = null;
 
+        Object obj = pluginRegistry.getPlugin(ICatalogService.class);
+        ICatalogService catalogService = (ICatalogService) obj;
+        
+        catalogService.closeTab(null, null);;
     }
 
-    private void checkStock (Product product, int change) {
-        Object service = pluginRegistrar.getPlugin(ICatalogService.class);
+    private boolean hasCart() {
+        return cart != null;
+    }
+
+    private void checkStock (Product product, int requiredQtd) {
+        Object service = pluginRegistry.getPlugin(ICatalogService.class);
         ICatalogService catalogService = null;
 
         if (service instanceof ICatalogService) {
             catalogService = (ICatalogService) service;
-            catalogService.checkStock(product, change);
+            catalogService.checkStock(product, requiredQtd);
         }
     }
 
