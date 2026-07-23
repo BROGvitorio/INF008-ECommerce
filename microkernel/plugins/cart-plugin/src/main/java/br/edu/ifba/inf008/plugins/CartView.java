@@ -111,7 +111,7 @@ public class CartView {
         );
     }
 
-    public static void cancelCartTab() {
+    public static void closeCartTab() {
         uiController.removeTab(cartTab);
         table = new TableView<CartItem>();
         cartTab = null;
