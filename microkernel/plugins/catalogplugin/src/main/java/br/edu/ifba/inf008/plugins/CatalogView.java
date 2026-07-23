@@ -4,7 +4,9 @@ import br.edu.ifba.inf008.domain.Product;
 import br.edu.ifba.inf008.interfaces.core.ICore;
 import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
 import br.edu.ifba.inf008.interfaces.core.IUIController;
+import br.edu.ifba.inf008.interfaces.plugins.ICartService;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
@@ -20,6 +22,7 @@ import javafx.geometry.Pos;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogView
@@ -27,8 +30,14 @@ public class CatalogView
     private FlowPane catalog;
     private final CatalogService service;
 
+    private final IUIController uiController;
+    private Tab catalogTab;
+    private Tab formTab;
+
     public CatalogView(CatalogService service) {
         this.service = service;
+        uiController = ICore.getInstance().getUIController();
+        service.setView(this);
     }
 
     private void loadProducts(List<Product> products) {
@@ -68,6 +77,13 @@ public class CatalogView
                 "-fx-background-color: #1976D2;" + "-fx-text-fill: white;" +
                 "-fx-background-radius: 6;" + "-fx-cursor: hand;"
             );
+
+            addCart.setOnAction(event -> {
+                Object obj = ICore.getInstance().getPluginRegistry().getPlugin(ICartService.class);
+                ICartService cartService = (ICartService) obj;
+
+                cartService.addCartItem(p.getId());
+            });
 
             HBox infoBox = new HBox(15);
             infoBox.setAlignment(Pos.CENTER_LEFT);
@@ -224,8 +240,20 @@ public class CatalogView
     }
 
     public void show() {
-        IUIController uiController = ICore.getInstance().getUIController();
-        uiController.createTab("Catalog", createCatalog());
-        uiController.createTab("Form", createForm());
-    } 
+        catalogTab = uiController.createTab("Catalog", createCatalog());
+        formTab = uiController.createTab("Form", createForm());
+    }
+
+    public List<Tab> getTabs () {
+        List<Tab> tabs = new ArrayList<Tab>();
+        tabs.add(catalogTab);
+        tabs.add(formTab);
+
+        return tabs;
+    }
+    
+    public void closeTabs() {
+        uiController.removeTab(catalogTab);
+        uiController.removeTab(formTab);
+    }
 }

@@ -5,14 +5,23 @@ import br.edu.ifba.inf008.domain.StockMovement;
 
 import br.edu.ifba.inf008.interfaces.core.ICore;
 import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
+import br.edu.ifba.inf008.interfaces.core.IUIController;
 import br.edu.ifba.inf008.interfaces.exceptions.InsufficientStockException;
 import br.edu.ifba.inf008.interfaces.exceptions.NotFoundException;
 import br.edu.ifba.inf008.interfaces.plugins.ICatalogService;
+import javafx.scene.control.Tab;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogService implements ICatalogService
 {
+    private CatalogView view;
+
+    public void setView(CatalogView view) {
+        this.view = view;
+    }
+
     private IPersistenceController persistenceController = ICore.getInstance().getPersistenceController();
 
     public void createProduct(Product product) {
@@ -55,4 +64,9 @@ public class CatalogService implements ICatalogService
             throw new InsufficientStockException(stock);
         }
     }
+
+    public void closeTab(IUIController uiController, Tab tab) {
+        view.closeTabs();
+    }
+
 }

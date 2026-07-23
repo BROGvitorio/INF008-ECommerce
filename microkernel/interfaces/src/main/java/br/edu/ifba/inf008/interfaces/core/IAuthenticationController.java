@@ -1,8 +1,8 @@
 package br.edu.ifba.inf008.interfaces.core;
 
+import br.edu.ifba.inf008.domain.Customer;
+
 public interface IAuthenticationController
 {
-    public abstract boolean signIn(String username, String password);
-    public abstract boolean signOut();
-    public abstract boolean signUp(String username, String password);
+    public abstract Customer signIn();
 }
