@@ -17,6 +17,7 @@
         <module>plugins/checkoutplugin</module>
         <module>plugins/paymentplugin</module>
         <module>plugins/discountplugin</module>
+        <module>plugins/shippingplugin</module>
     </modules>
 
     <properties>
