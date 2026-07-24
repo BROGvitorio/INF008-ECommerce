@@ -60,46 +60,6 @@ public class CheckoutView {
         uiController = ICore.getInstance().getUIController();
     }
 
-    private static VBox createShippingBox () {
-        TextField addressField = new TextField();
-        addressField.setPromptText("Enter your full address");
-        addressField.setMaxWidth(Double.MAX_VALUE); 
-        addressField.setPrefHeight(40);
-        HBox.setHgrow(addressField, Priority.ALWAYS);
-
-        ComboBox<String> shippingCombo = new ComboBox<>();
-        shippingCombo.getItems().addAll(
-                "Standard Shipping ($5.00)",
-                "Express Shipping ($15.00)",
-                "Next Day ($25.00)"
-        );
-        shippingCombo.getSelectionModel().selectFirst();
-        shippingCombo.setPrefHeight(40);
-        HBox.setMargin(shippingCombo, new Insets(0, 10, 0, 10));
-        
-        Button calcShipping = new Button("Calculate");
-        calcShipping.setPrefWidth(100);
-        calcShipping.setPrefHeight(40);
-        calcShipping.setStyle(
-            "-fx-background-color:#2E64B6;" +
-            "-fx-text-fill:white;" +
-            "-fx-font-size:14px;" +
-            "-fx-font-weight:bold;"
-        );
-        
-        HBox shippingInputs = new HBox();
-        shippingInputs.getChildren().addAll(addressField, shippingCombo, calcShipping);
-        
-        Label shippingLabel = new Label("Shipping");
-        shippingLabel.setStyle("-fx-font-size:22px; -fx-font-weight:bold;");
-        VBox.setMargin(shippingLabel, new Insets(0, 0, 5, 0));
-        
-        VBox root = new VBox();
-        root.getChildren().addAll(shippingLabel, shippingInputs);
-
-        return root;
-    }
-
     private static void createItemsTable (Cart cart) {
         TableColumn<CartItem, String> nameCol = new TableColumn<>("NAME");
         nameCol.setCellValueFactory(cellData -> new SimpleStringProperty(
@@ -224,23 +184,8 @@ public class CheckoutView {
         VBox.setVgrow(itemsTable, Priority.ALWAYS);
 
         Separator s2 = new Separator();
-        VBox shipping = createShippingBox();
-
-        Label discountLabel = new Label("Apply Discount:");
-        discountLabel.setStyle("-fx-font-size:22px; -fx-font-weight:bold;");
-        ToggleGroup discountGroup = new ToggleGroup();
-        RadioButton promo = new RadioButton("Promo Code");
-        promo.setToggleGroup(discountGroup);
-        promo.setSelected(true);
-        RadioButton student = new RadioButton("Student Discount");
-        student.setToggleGroup(discountGroup);
-        HBox radioBox = new HBox(20, promo, student);
-        TextField promoField = new TextField();
-        promoField.setPromptText("Enter Promo Code");
-        HBox.setHgrow(promoField, Priority.ALWAYS);
-        Button applyButton = new Button("Apply");
-        applyButton.setPrefWidth(130);
-        HBox promoBox = new HBox(10, promoField, applyButton);
+        VBox shipping = getComponentUI.apply("shipping");
+        VBox discount = getComponentUI.apply("discount");
 
         Separator s3 = new Separator();
 
@@ -262,9 +207,7 @@ public class CheckoutView {
                 itemsTable,
                 s2,
                 shipping,
-                discountLabel,
-                radioBox,
-                promoBox,
+                discount,
                 s3,
                 totals
         );
