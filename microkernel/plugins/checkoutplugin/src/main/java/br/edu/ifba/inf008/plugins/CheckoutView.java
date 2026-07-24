@@ -212,8 +212,6 @@ public class CheckoutView {
         );
 
         VBox paymentBox = getComponentUI.apply("payment");
-        if (paymentBox == null)
-            paymentBox = new VBox();
 
         HBox content = new HBox(20, left, paymentBox);
 

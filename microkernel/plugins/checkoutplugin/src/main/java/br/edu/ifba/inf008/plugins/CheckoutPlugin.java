@@ -35,16 +35,6 @@ public class CheckoutPlugin implements IPlugin, ICheckoutService {
     
     public void start() {
         persistenceController = ICore.getInstance().getPersistenceController();
-        
-        // Cart lastCart = null;
-        // for (Cart c : persistenceController.findAll(Cart.class)) {
-        //     if (lastCart == null || c.getId() > lastCart.getId()) {
-        //         lastCart = c;
-        //     }
-        // }
-        // cart = lastCart;
-    
-        
     }
     
     public void setCart(Cart cart) {
@@ -93,9 +83,18 @@ public class CheckoutPlugin implements IPlugin, ICheckoutService {
         List<Object> components = pluginRegistry.getPlugins(ICheckoutComponent.class);
         if (components.isEmpty()) {
             System.out.println("No checkout components are currently available.");
-            return null;
+            return new VBox();
         }
 
-        return null;
+        for (Object obj : components) {
+            if (obj instanceof ICheckoutComponent) {
+                component = (ICheckoutComponent) obj;
+
+                if (component.getName().equalsIgnoreCase(name))
+                    return component.getUI();
+            }
+        }
+
+        return new VBox();
     }
 }
