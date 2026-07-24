@@ -146,11 +146,11 @@ public class CheckoutPlugin implements IPlugin, ICheckoutService {
             for (Object obj : components) {
                 if (obj instanceof ICheckoutComponent) {
                     ICheckoutComponent component = (ICheckoutComponent) obj;
-                    component.process(context);
+                    component.process();
                 }
             }
 
-            //order.setStatus(context.getPaymentStatus());
+            order.setStatus(context.getPaymentStatus());
             //order.setShippingMethod(context.getShippingMethod());
             //order.setShippingTotal(context.getShippingTotal());
             //order.setDiscountTotal(context.getDiscountTotal());
