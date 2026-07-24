@@ -26,7 +26,6 @@ public class PaymentPlugin implements IPlugin, ICheckoutComponent {
         paymentMethods.add(new CreditCardPayment());
         paymentMethods.add(new PixPayment());
         paymentMethods.add(new BoletoPayment());
-        BoletoPayment.setOnMissingData(PaymentView::showErrorMessage);
 
         IUIController uiController = ICore.getInstance().getUIController();
         IPluginRegistry pluginRegistry = ICore.getInstance().getPluginRegistry();
@@ -46,23 +45,22 @@ public class PaymentPlugin implements IPlugin, ICheckoutComponent {
     }
 
     public Object process() {
-        try {
-            PaymentView.getSelectedMethod(paymentMethods).processPayment();
-            PaymentView.showErrorMessage("");
-            PaymentView.showOrderConfirmedPopup();            
-        } catch (InvalidPaymentException ex) {
-            PaymentView.showErrorMessage(ex.getMessage());
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
+        PaymentView.getSelectedMethod(paymentMethods).processPayment();
+        // try {
+        //     // PaymentView.showErrorMessage("");
+        //     // PaymentView.showOrderConfirmedPopup();            
+        // } catch (InvalidPaymentException ex) {
+        //     PaymentView.showErrorMessage(ex.getMessage());
+        // } catch (Exception ex) {
+        //     System.err.println(ex.getMessage());
+        // }
 
         return null;
     }
 
     public VBox getUI () {
         return PaymentView.setUI(
-            paymentMethods,
-            () -> process()
+            paymentMethods
         );
     }
 }

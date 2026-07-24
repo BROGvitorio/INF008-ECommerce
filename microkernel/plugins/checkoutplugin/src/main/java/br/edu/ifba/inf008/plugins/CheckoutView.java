@@ -12,10 +12,11 @@ import br.edu.ifba.inf008.domain.Cart;
 import br.edu.ifba.inf008.domain.CartItem;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -29,6 +30,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -138,11 +147,55 @@ public class CheckoutView {
 
     }
 
+    private static VBox createRightSide(
+        VBox paymentBox,
+        Runnable onCheckout
+    ) {
+        VBox right = new VBox();
+
+        Separator s2 = new Separator();
+
+        Button checkout = new Button("Checkout");
+        checkout.setMaxWidth(Double.MAX_VALUE);
+        checkout.setPrefHeight(50);
+        checkout.setOnAction(e -> onCheckout.run());
+
+        checkout.setStyle(
+                "-fx-background-color:#2E64B6;" +
+                        "-fx-text-fill:white;" +
+                        "-fx-font-size:24px;" +
+                        "-fx-font-weight:bold;");
+
+        Separator s3 = new Separator();
+
+        VBox errorBox = new VBox(20);
+        VBox.setVgrow(errorBox, Priority.SOMETIMES);
+        errorBox.setAlignment(Pos.CENTER);
+        errorBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        errorBox.setFillWidth(true);
+
+        Text errorText = new Text();
+        errorText.textProperty().bind(errorMessage);
+        errorText.setFill(Color.RED);
+        errorBox.getChildren().add(errorText);
+
+        right.getChildren().addAll(
+            paymentBox,
+            s2,
+            checkout,
+            s3,
+            errorBox
+        );
+
+        return right;
+    }
+
     public static void createCheckoutPage(
         Cart cart,
         Supplier<Integer> getItemsCount, 
         Supplier<BigDecimal> getItemsTotal,
-        Function<String, VBox> getComponentUI
+        Function<String, VBox> getComponentUI,
+        Runnable onCheckout
     ) {
 
         BorderPane root = new BorderPane();
@@ -211,16 +264,46 @@ public class CheckoutView {
                 totals
         );
 
-        VBox paymentBox = getComponentUI.apply("payment");
 
-        HBox content = new HBox(20, left, paymentBox);
+        VBox right = createRightSide(
+            getComponentUI.apply("payment"),
+            onCheckout
+        );
+        // VBox paymentBox = getComponentUI.apply("payment");
+
+        HBox content = new HBox(20, left, right);
 
         HBox.setHgrow(left, Priority.ALWAYS);
-        HBox.setHgrow(paymentBox, Priority.NEVER);
+        HBox.setHgrow(right, Priority.NEVER);
 
         root.setCenter(content);
 
         checkoutTab = uiController.createTab("Checkout", root);
+    }
+
+    public static void showErrorMessage(String message) {
+        errorMessage.set(message);
+    }
+
+    public static void showOrderConfirmedPopup() {
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setTitle("Order Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText("Your order has been confirmed!");
+
+        alert.getButtonTypes().setAll(ButtonType.OK);
+
+        ImageView imageView = new ImageView(
+            new Image(CheckoutView.class.getResourceAsStream("/confirmed-order-icon.png"))
+        );
+        imageView.setFitWidth(70);
+        imageView.setFitHeight(70); 
+        imageView.setPreserveRatio(true);
+        alert.getDialogPane().setGraphic(imageView);
+
+        alert.showAndWait();
     }
 
     private static BorderPane createTotalRow (

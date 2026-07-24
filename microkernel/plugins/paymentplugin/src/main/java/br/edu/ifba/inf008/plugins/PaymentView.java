@@ -28,11 +28,9 @@ import javafx.stage.StageStyle;
 public class PaymentView {
     private static ComboBox<String> paymentCombo = new ComboBox<>();
     private static VBox paymentMethodInputs;
-    private static final StringProperty errorMessage = new SimpleStringProperty("");
+    // private static final StringProperty errorMessage = new SimpleStringProperty("");
 
-    public static VBox setUI(
-            List<IPayable> paymentMethods,
-            Runnable onCheckout) {
+    public static VBox setUI(List<IPayable> paymentMethods) {
         VBox right = new VBox(18);
         right.setPadding(new Insets(20));
         right.setPrefWidth(420);
@@ -59,7 +57,7 @@ public class PaymentView {
                 .selectedItemProperty()
                 .addListener((observable, oldString, newString) -> {
                     if (newString != null) {
-                        PaymentView.showErrorMessage("");
+                        // PaymentView.showErrorMessage("");
                         IPayable selectedMethod = PaymentView.getSelectedMethod(paymentMethods);
 
                         int index = right.getChildren().indexOf(paymentMethodInputs);
@@ -70,41 +68,42 @@ public class PaymentView {
                     }
                 });
 
-        Separator s2 = new Separator();
+        // Separator s2 = new Separator();
 
-        Button checkout = new Button("Checkout");
-        checkout.setMaxWidth(Double.MAX_VALUE);
-        checkout.setPrefHeight(50);
-        checkout.setOnAction(e -> onCheckout.run());
+        // Button checkout = new Button("Checkout");
+        // checkout.setMaxWidth(Double.MAX_VALUE);
+        // checkout.setPrefHeight(50);
+        // checkout.setOnAction(e -> onCheckout.run());
 
-        checkout.setStyle(
-                "-fx-background-color:#2E64B6;" +
-                        "-fx-text-fill:white;" +
-                        "-fx-font-size:24px;" +
-                        "-fx-font-weight:bold;");
+        // checkout.setStyle(
+        //         "-fx-background-color:#2E64B6;" +
+        //                 "-fx-text-fill:white;" +
+        //                 "-fx-font-size:24px;" +
+        //                 "-fx-font-weight:bold;");
 
-        Separator s3 = new Separator();
+        // Separator s3 = new Separator();
 
-        VBox errorBox = new VBox(20);
-        VBox.setVgrow(errorBox, Priority.SOMETIMES);
-        errorBox.setAlignment(Pos.CENTER);
-        errorBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        errorBox.setFillWidth(true);
+        // VBox errorBox = new VBox(20);
+        // VBox.setVgrow(errorBox, Priority.SOMETIMES);
+        // errorBox.setAlignment(Pos.CENTER);
+        // errorBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        // errorBox.setFillWidth(true);
 
-        Text errorText = new Text();
-        errorText.textProperty().bind(errorMessage);
-        errorText.setFill(Color.RED);
-        errorBox.getChildren().add(errorText);
+        // Text errorText = new Text();
+        // errorText.textProperty().bind(errorMessage);
+        // errorText.setFill(Color.RED);
+        // errorBox.getChildren().add(errorText);
 
         right.getChildren().addAll(
                 paymentTitle,
                 s1,
                 paymentCombo,
-                paymentMethodInputs,
-                s2,
-                checkout,
-                s3,
-                errorBox);
+                paymentMethodInputs
+                // s2,
+                // checkout,
+                // s3,
+                // errorBox
+            );
 
         return right;
     }
@@ -118,9 +117,9 @@ public class PaymentView {
         return null;
     }
 
-    public static void showErrorMessage(String message) {
-        errorMessage.set(message);
-    }
+    // public static void showErrorMessage(String message) {
+    //     errorMessage.set(message);
+    // }
 
     public static void showOrderConfirmedPopup() {
 

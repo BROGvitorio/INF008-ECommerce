@@ -44,7 +44,7 @@ public class CatalogService implements ICatalogService
         for (StockMovement m : movements) {
             if (m.getMovementType().equals("INBOUND")) {
                 stock += m.getQuantity();
-            } else if (m.getMovementType().equals("OUTBOUND")) {
+            } else {
                 stock -= m.getQuantity();
             }
         }

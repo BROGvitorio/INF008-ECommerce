@@ -8,29 +8,20 @@ import br.edu.ifba.inf008.interfaces.exceptions.InvalidPaymentException;
 import javafx.scene.layout.VBox;
 
 public class BoletoPayment implements IPayable {
-    private static Consumer<String> onMissingData;
-    
-    public static void setOnMissingData(Consumer<String> callback) {
-        onMissingData = callback;
-    } 
-
     public String getName() {
         return "Boleto";
     }
 
     public VBox getUI() {
-
         return BoletoView.setUI(() -> generateBoleto());
     }
 
     public void processPayment() {
-        if (!checkCpf())
-            throw new InvalidPaymentException();
+        checkCpf();
     }
 
     public String generateBoleto() {
-        if (!checkCpf())
-            return null;
+        checkCpf();
 
         Random r = new Random();
 
@@ -46,19 +37,15 @@ public class BoletoPayment implements IPayable {
             String.format("%07d", r.nextInt(9999999));
     }
 
-    private boolean checkCpf() {
+    private void checkCpf() {
         String cpf = BoletoView.getCpf();
 
         if (cpf == null || cpf.isBlank()) {
-            onMissingData.accept("The CPF field must be filled in.");
-            return false;
+            throw new InvalidPaymentException("The CPF field must be filled in.");
         }
 
         if (cpf.length() != 14) {
-            onMissingData.accept("Invalid CPF.");
-            return false;
+            throw new InvalidPaymentException("Invalid CPF.");
         }
-
-        return true;
     }
 }

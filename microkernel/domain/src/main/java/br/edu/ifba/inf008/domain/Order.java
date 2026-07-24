@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -54,6 +56,17 @@ public class Order {
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<OrderItem> items = new ArrayList<>();
+
+
+    public Order(Customer customer, Cart cart, String status, BigDecimal subtotal) {
+        this.customer = customer;
+        this.cart = cart;
+        this.status = status;
+        this.subtotal = subtotal;
+    }
+
     public Order(Customer customer, Cart cart, ShippingMethod shippingMethod, String status, 
                  BigDecimal subtotal, BigDecimal discountTotal, BigDecimal shippingTotal,
                  BigDecimal grandTotal) {
@@ -65,5 +78,17 @@ public class Order {
         this.discountTotal = discountTotal;
         this.shippingTotal = shippingTotal;
         this.grandTotal = grandTotal;
+    }
+
+    public List<OrderItem> getItems () {
+        return items;
+    }
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+    }
+
+    public void removeItem(OrderItem item) {
+        items.remove(item);
     }
 }

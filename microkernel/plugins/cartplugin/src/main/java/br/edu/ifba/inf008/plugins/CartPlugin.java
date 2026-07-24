@@ -47,7 +47,6 @@ public class CartPlugin implements IPlugin, ICartService {
 
         try {
             customer = ICore.getInstance().getAuthenticationController().signIn();
-            
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -109,7 +108,7 @@ public class CartPlugin implements IPlugin, ICartService {
             checkStock(p, 1);
 
             CartItem ci = new CartItem (cart, p, Integer.valueOf(1), p.getUnitPrice());
-            StockMovement sm = new StockMovement(p, "OUTBOUND", Integer.valueOf(1), "Cart reservation");
+            StockMovement sm = new StockMovement(p, "RESERVED", Integer.valueOf(1), "Cart reservation");
 
             persistenceController.save(sm);
             persistenceController.save(ci);
@@ -203,7 +202,7 @@ public class CartPlugin implements IPlugin, ICartService {
         
         obj = pluginRegistry.getPlugin(ICheckoutService.class);
         ICheckoutService checkoutService = (ICheckoutService) obj;
-        checkoutService.setCart(cart);
+        checkoutService.createOrder(cart);
         
         cart = null;
     }
