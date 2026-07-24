@@ -5,6 +5,7 @@ import br.edu.ifba.inf008.interfaces.core.ICore;
 import br.edu.ifba.inf008.interfaces.core.IPersistenceController;
 import br.edu.ifba.inf008.interfaces.core.IUIController;
 import br.edu.ifba.inf008.interfaces.plugins.ICartService;
+
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
@@ -19,6 +20,10 @@ import javafx.geometry.Insets;
 import javafx.scene.text.Text;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.stage.Stage;
+import javafx.scene.Scene;  
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.math.BigDecimal;
@@ -154,11 +159,8 @@ public class CatalogView
 
             List<Product> products = service.findAllProducts();
             loadProducts(products);
-            
-            txtSku.clear();
-            txtName.clear();
-            txtDescription.clear();
-            txtPrice.clear();
+
+            ((Stage) save.getScene().getWindow()).close();
         });
 
         HBox button = new HBox(10, save);
@@ -182,10 +184,36 @@ public class CatalogView
         return root;
     }
 
+    private void openProductForm() {
+        Scene scene = new Scene(createForm(), 700, 650);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Product Registration");
+
+        stage.show();
+    }
+
     //Listagem de produtos
     private ScrollPane createCatalog() {
         Label title = new Label("Product Catalog");
         title.setStyle("-fx-font-size: 24px;" + "-fx-font-weight: bold;");
+
+        Button newProduct = new Button("New Product");
+        newProduct.setStyle(
+            "-fx-background-color: #2E7D32;" + "-fx-text-fill: white;" +
+            "-fx-font-weight: bold;" + "-fx-padding: 8 20;" + "-fx-background-radius: 6;"
+        );
+
+        newProduct.setOnAction(e -> openProductForm());
+
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        header.getChildren().addAll(title, spacer, newProduct);
 
         HBox filter = createFilter();
 
@@ -199,7 +227,7 @@ public class CatalogView
         VBox root = new VBox(15);
         root.setPadding(new Insets(15));
 
-        root.getChildren().addAll(title, filter, catalog);
+        root.getChildren().addAll(header, filter, catalog);
 
         ScrollPane scroll = new ScrollPane(root);
         scroll.setFitToWidth(true);
@@ -241,19 +269,16 @@ public class CatalogView
 
     public void show() {
         catalogTab = uiController.createTab("Catalog", createCatalog());
-        formTab = uiController.createTab("Form", createForm());
     }
 
     public List<Tab> getTabs () {
         List<Tab> tabs = new ArrayList<Tab>();
         tabs.add(catalogTab);
-        tabs.add(formTab);
 
         return tabs;
     }
     
     public void closeTabs() {
         uiController.removeTab(catalogTab);
-        uiController.removeTab(formTab);
     }
 }

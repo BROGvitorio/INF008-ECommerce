@@ -16,7 +16,7 @@ public class AuthenticationController implements IAuthenticationController
 
         if (customer == null) {
             throw new IllegalStateException(
-                "Cliente com ID " + customerId + " não encontrado."
+                "Client with ID " + customerId + " not found."
             );
         }
 
