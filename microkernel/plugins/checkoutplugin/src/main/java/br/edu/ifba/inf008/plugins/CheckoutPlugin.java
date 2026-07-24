@@ -135,7 +135,6 @@ public class CheckoutPlugin implements IPlugin, ICheckoutService {
 
     public void checkout() {
         CheckoutContext context = new CheckoutContext(order);
-        ICheckoutComponent component = null;
         
         try {
             List<Object> components = pluginRegistry.getPlugins(ICheckoutComponent.class);
@@ -146,16 +145,15 @@ public class CheckoutPlugin implements IPlugin, ICheckoutService {
 
             for (Object obj : components) {
                 if (obj instanceof ICheckoutComponent) {
-                    component = (ICheckoutComponent) obj;
-
-                    component.process();
+                    ICheckoutComponent component = (ICheckoutComponent) obj;
+                    component.process(context);
                 }
             }
 
-            order.setStatus(context.getPaymentStatus());
-            order.setShippingMethod(context.getShippingMethod());
-            order.setShippingTotal(context.getShippingTotal());
-            order.setDiscountTotal(context.getDiscountTotal());
+            //order.setStatus(context.getPaymentStatus());
+            //order.setShippingMethod(context.getShippingMethod());
+            //order.setShippingTotal(context.getShippingTotal());
+            //order.setDiscountTotal(context.getDiscountTotal());
 
             persistenceController.save(order);
             

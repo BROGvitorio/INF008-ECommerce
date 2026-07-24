@@ -202,6 +202,7 @@ public class CartPlugin implements IPlugin, ICartService {
         
         obj = pluginRegistry.getPlugin(ICheckoutService.class);
         ICheckoutService checkoutService = (ICheckoutService) obj;
+
         checkoutService.createOrder(cart);
         
         cart = null;

@@ -5,5 +5,5 @@ import javafx.scene.layout.VBox;
 public interface ICheckoutComponent {
     String getName();
     VBox getUI();
-    Object process();
+    void process(CheckoutContext context);
 }

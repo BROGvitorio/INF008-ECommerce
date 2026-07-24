@@ -138,6 +138,11 @@ public class CheckoutView {
             "-fx-border-color: transparent;" +
             "-fx-table-cell-border-color: transparent;"
         );
+        itemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        itemsTable.setPrefHeight(200);
+        itemsTable.setMinHeight(200);
+        itemsTable.setMaxHeight(Double.MAX_VALUE);
+        VBox.setVgrow(itemsTable, Priority.ALWAYS);
         
         itemsTable.getColumns().clear();
         itemsTable.getItems().clear();
