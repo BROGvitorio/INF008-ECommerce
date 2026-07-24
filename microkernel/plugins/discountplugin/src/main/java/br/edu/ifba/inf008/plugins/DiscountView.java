@@ -15,6 +15,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
 public class DiscountView {
+    private final DiscountService service;
+
+    public DiscountView(DiscountService service) {
+        this.service = service;
+        uiController = ICore.getInstance().getUIController();
+        service.setView(this);
+    }
+
     private VBox createView() {
         Label title = new Label("Apply Discount");
         title.setStyle("-fx-font-size:22px; -fx-font-weight:bold;");
@@ -30,7 +38,11 @@ public class DiscountView {
             "-fx-font-weight: bold;" + "-fx-cursor: hand;"
         );
 
-        Discount discount = repository.findByCode("WELCOME10");
+        apply.setOnAction(event -> {
+            String code = promoField.getText();
+            service.applyCoupon(code);
+            promoField.clear();
+        });
 
         HBox promoBox = new HBox(10);
         promoBox.getChildren().addAll(promoField, apply);
