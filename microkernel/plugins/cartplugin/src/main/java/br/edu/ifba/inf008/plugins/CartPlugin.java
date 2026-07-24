@@ -17,6 +17,7 @@ import br.edu.ifba.inf008.interfaces.core.IPluginRegistry;
 import br.edu.ifba.inf008.interfaces.plugins.IPlugin;
 import br.edu.ifba.inf008.interfaces.plugins.ICartService;
 import br.edu.ifba.inf008.interfaces.plugins.ICatalogService;
+import br.edu.ifba.inf008.interfaces.plugins.ICheckoutService;
 
 import br.edu.ifba.inf008.interfaces.exceptions.InsufficientStockException;
 import br.edu.ifba.inf008.interfaces.exceptions.NotFoundException;
@@ -46,7 +47,6 @@ public class CartPlugin implements IPlugin, ICartService {
 
         try {
             customer = ICore.getInstance().getAuthenticationController().signIn();
-            
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -108,7 +108,7 @@ public class CartPlugin implements IPlugin, ICartService {
             checkStock(p, 1);
 
             CartItem ci = new CartItem (cart, p, Integer.valueOf(1), p.getUnitPrice());
-            StockMovement sm = new StockMovement(p, "OUTBOUND", Integer.valueOf(1), "Cart reservation");
+            StockMovement sm = new StockMovement(p, "RESERVED", Integer.valueOf(1), "Cart reservation");
 
             persistenceController.save(sm);
             persistenceController.save(ci);
@@ -194,12 +194,18 @@ public class CartPlugin implements IPlugin, ICartService {
 
     public void toCheckout () {
         CartView.closeCartTab();
-        cart = null;
-
+        
         Object obj = pluginRegistry.getPlugin(ICatalogService.class);
         ICatalogService catalogService = (ICatalogService) obj;
         
-        catalogService.closeTab(null, null);;
+        catalogService.closeTab(null, null);
+        
+        obj = pluginRegistry.getPlugin(ICheckoutService.class);
+        ICheckoutService checkoutService = (ICheckoutService) obj;
+
+        checkoutService.createOrder(cart);
+        
+        cart = null;
     }
 
     private boolean hasCart() {

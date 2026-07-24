@@ -33,7 +33,7 @@ public class Cart {
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItem> items = new ArrayList<CartItem>();
 
     public Cart(Customer customer, String status) {

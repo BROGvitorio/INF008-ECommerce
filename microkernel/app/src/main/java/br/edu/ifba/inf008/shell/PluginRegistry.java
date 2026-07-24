@@ -32,10 +32,10 @@ public class PluginRegistry implements IPluginRegistry {
     }
 
     public <T> List<Object> getPlugins(Class<T> type) {
-        return plugins.get(type);
+        return plugins.getOrDefault(type, new ArrayList<Object>());
     }
 
     public <T> Object getPlugin(Class<T> type) {
-        return plugins.get(type).get(0);
+        return getPlugins(type).get(0);
     }
 }
