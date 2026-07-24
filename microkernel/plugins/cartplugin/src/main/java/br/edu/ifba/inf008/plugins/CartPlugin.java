@@ -31,7 +31,7 @@ public class CartPlugin implements IPlugin, ICartService {
     private Cart cart = null;
     private Map<CartItem, StockMovement> cartStockMovements = new HashMap<CartItem, StockMovement>();
 
-    private Customer testCustomer;
+    private Customer customer;
     
     public boolean init() {
         pluginRegistry =  ICore.getInstance().getPluginRegistry();
@@ -44,10 +44,11 @@ public class CartPlugin implements IPlugin, ICartService {
     public void start () {
         persistenceController = ICore.getInstance().getPersistenceController();
 
-        testCustomer = persistenceController.findById(Customer.class, Long.valueOf(4));
-        if (testCustomer == null) {
-            testCustomer = new Customer("Cart Test Customer", "cart.test.customer@email.com", "STUDENT");
-            persistenceController.save(testCustomer);
+        try {
+            customer = ICore.getInstance().getAuthenticationController().signIn();
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
  
@@ -57,7 +58,7 @@ public class CartPlugin implements IPlugin, ICartService {
                 throw new IllegalStateException("You already have a shipping cart.");
                 
             cart = new Cart (
-                testCustomer,
+                customer,
                 "OPEN"
             ); 
 

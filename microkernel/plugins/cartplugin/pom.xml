@@ -10,7 +10,7 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>cart-plugin</artifactId>
+    <artifactId>cartplugin</artifactId>
 
     <dependencies>
         <dependency>
